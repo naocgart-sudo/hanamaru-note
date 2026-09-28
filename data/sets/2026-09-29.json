@@ -1,21 +1,98 @@
 {
   "id": "2026-09-29",
   "date": "2026-09-29",
-  "title": "くり{下|さ}がりのひき{算|ざん}",
-  "message": "きょうは ひき{算|ざん}。10から ひいて、のこりを たすのがコツ。ヒントの{図|ず}も つかってね。",
+  "title": "{繰|く}り{下|さ}がりの{引|ひ}き{算|ざん}",
   "sections": [
-    { "subject": "math", "title": "10のまとまり（じゅんび）", "generate": { "skill": "make10", "count": 3 } },
-    { "subject": "math", "title": "くり{上|あ}がり（きのうの）", "generate": { "skill": "add_carry1", "count": 4 } },
-    { "subject": "math", "title": "くり{下|さ}がりのひき{算|ざん}", "generate": { "skill": "sub_borrow", "count": 7 } },
-    { "subject": "english", "title": "まん{中|なか}の{母音|ぼいん}", "generate": { "skill": "ph_vowel", "count": 4 } },
+    {
+      "subject": "math",
+      "title": "10のまとまり（{準備|じゅんび}）",
+      "generate": {
+        "skill": "make10",
+        "count": 3
+      }
+    },
+    {
+      "subject": "math",
+      "title": "{繰|く}り{上|あ}がり（{昨日|きのう}の）",
+      "generate": {
+        "skill": "add_carry1",
+        "count": 4
+      }
+    },
+    {
+      "subject": "math",
+      "title": "{繰|く}り{下|さ}がりの{引|ひ}き{算|ざん}",
+      "generate": {
+        "skill": "sub_borrow",
+        "count": 7
+      }
+    },
+    {
+      "subject": "english",
+      "title": "{真|ま}ん{中|なか}の{母音|ぼいん}",
+      "generate": {
+        "skill": "ph_vowel",
+        "count": 4
+      }
+    },
     {
       "subject": "english",
       "title": "is・are",
       "questions": [
-        { "type": "choice", "prompt": "「{彼|かれ}は {先生|せんせい}です」\nHe ___ a teacher.", "options": ["am", "is", "are"], "answer": "is", "fixed": true, "explain": ["He・She・It のあとは is"] },
-        { "type": "choice", "prompt": "「{彼女|かのじょ}は {背|せ}が{高|たか}い」\nShe ___ tall.", "options": ["am", "is", "are"], "answer": "is", "fixed": true, "explain": ["She のあとは is"] },
-        { "type": "choice", "prompt": "「わたしたちは {友|とも}だちです」\nWe ___ friends.", "options": ["am", "is", "are"], "answer": "are", "fixed": true, "explain": ["We・You・They（ふたり{以上|いじょう}）のあとは are"] },
-        { "type": "order", "prompt": "ならべかえよう\n「{彼|かれ}は ケンです」", "words": ["He", "is", "Ken."], "explain": ["He is Ken."] }
+        {
+          "type": "choice",
+          "prompt": "「{彼|かれ}は{先生|せんせい}です」\nHe ___ a teacher.",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "answer": "is",
+          "fixed": true,
+          "explain": [
+            "He・She・It の{後|あと}は is"
+          ]
+        },
+        {
+          "type": "choice",
+          "prompt": "「{彼女|かのじょ}は{背|せ}が{高|たか}い」\nShe ___ tall.",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "answer": "is",
+          "fixed": true,
+          "explain": [
+            "She の{後|あと}は is"
+          ]
+        },
+        {
+          "type": "choice",
+          "prompt": "「{私|わたし}たちは{友達|ともだち}です」\nWe ___ friends.",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "answer": "are",
+          "fixed": true,
+          "explain": [
+            "We・You・They（2{人|ふたり}{以上|いじょう}）の{後|あと}は are"
+          ]
+        },
+        {
+          "type": "order",
+          "prompt": "{並|なら}べ{替|か}えよう\n「{彼|かれ}はケンです」",
+          "words": [
+            "He",
+            "is",
+            "Ken."
+          ],
+          "explain": [
+            "He is Ken."
+          ]
+        }
       ]
     }
   ]

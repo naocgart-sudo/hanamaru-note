@@ -1,22 +1,110 @@
 {
   "id": "2026-09-28",
   "date": "2026-09-28",
-  "title": "10のまとまりで たし{算|ざん}",
-  "message": "まずは かんたんなのから。まちがえても だいじょうぶ、あとで もう{一回|いっかい} {出|で}るよ。",
+  "title": "10のまとまりで{足|た}し{算|ざん}",
   "sections": [
-    { "subject": "math", "title": "10のまとまり", "generate": { "skill": "make10", "count": 5 } },
-    { "subject": "math", "title": "くり{上|あ}がりのたし{算|ざん}", "generate": { "skill": "add_carry1", "count": 8 } },
-    { "subject": "english", "title": "はじめの{音|おと}", "generate": { "skill": "ph_initial", "count": 4 } },
+    {
+      "subject": "math",
+      "title": "10のまとまり",
+      "generate": {
+        "skill": "make10",
+        "count": 5
+      }
+    },
+    {
+      "subject": "math",
+      "title": "{繰|く}り{上|あ}がり",
+      "generate": {
+        "skill": "add_carry1",
+        "count": 8
+      }
+    },
+    {
+      "subject": "english",
+      "title": "{最初|さいしょ}の{音|おと}",
+      "generate": {
+        "skill": "ph_initial",
+        "count": 4
+      }
+    },
     {
       "subject": "english",
       "title": "am・is・are",
       "questions": [
-        { "type": "choice", "prompt": "「わたしは アキです」\nI ___ Aki.", "options": ["am", "is", "are"], "answer": "am", "fixed": true, "explain": ["I のあとは am"] },
-        { "type": "choice", "prompt": "「あなたは わたしの{友|とも}だち」\nYou ___ my friend.", "options": ["am", "is", "are"], "answer": "are", "fixed": true, "explain": ["You のあとは are"] },
-        { "type": "choice", "prompt": "「これは ペンです」\nThis ___ a pen.", "options": ["am", "is", "are"], "answer": "is", "fixed": true, "explain": ["This・He・She のあとは is"] },
-        { "type": "order", "prompt": "ならべかえよう\n「わたしは {中学生|ちゅうがくせい}です」", "words": ["I", "am", "a", "student."], "explain": ["I am a student."] },
-        { "type": "text", "prompt": "きこえた{単語|たんご}を{書|か}こう", "speak": "dog", "autoSpeak": true, "answer": "dog", "explain": ["d - o - g → dog"] },
-        { "type": "self", "prompt": "ノートに{書|か}いてみよう\n「わたしは テニスが{好|す}きです」", "answer": "I like tennis.", "explain": ["{好|す}き = like", "{文|ぶん}のさいしょは{大文字|おおもじ}、さいごに ."] }
+        {
+          "type": "choice",
+          "prompt": "「{私|わたし}はアキです」\nI ___ Aki.",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "answer": "am",
+          "fixed": true,
+          "explain": [
+            "I の{後|あと}は am"
+          ]
+        },
+        {
+          "type": "choice",
+          "prompt": "「あなたは{私|わたし}の{友達|ともだち}」\nYou ___ my friend.",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "answer": "are",
+          "fixed": true,
+          "explain": [
+            "You の{後|あと}は are"
+          ]
+        },
+        {
+          "type": "choice",
+          "prompt": "「これはペンです」\nThis ___ a pen.",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "answer": "is",
+          "fixed": true,
+          "explain": [
+            "This・He・She の{後|あと}は is"
+          ]
+        },
+        {
+          "type": "order",
+          "prompt": "{並|なら}べ{替|か}えよう\n「{私|わたし}は{中学生|ちゅうがくせい}です」",
+          "words": [
+            "I",
+            "am",
+            "a",
+            "student."
+          ],
+          "explain": [
+            "I am a student."
+          ]
+        },
+        {
+          "type": "text",
+          "prompt": "{聞|き}こえた{単語|たんご}を{書|か}こう",
+          "speak": "dog",
+          "autoSpeak": true,
+          "answer": "dog",
+          "explain": [
+            "d - o - g → dog"
+          ]
+        },
+        {
+          "type": "self",
+          "prompt": "ノートに{書|か}いてみよう\n「{私|わたし}はテニスが{好|す}きです」",
+          "answer": "I like tennis.",
+          "explain": [
+            "{好|す}き = like",
+            "{文|ぶん}の{最初|さいしょ}は{大文字|おおもじ}、{最後|さいご}に ."
+          ]
+        }
       ]
     }
   ]

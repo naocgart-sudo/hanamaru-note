@@ -1,10 +1,23 @@
 {
   "id": "2026-09-27",
   "date": "2026-09-27",
-  "title": "おためしプリント",
-  "message": "アプリのためしうちです。{気楽|きらく}にどうぞ。",
+  "title": "お{試|ため}しプリント",
   "sections": [
-    { "subject": "math", "title": "10のまとまり", "generate": { "skill": "make10", "count": 4 } },
-    { "subject": "english", "title": "はじめの{音|おと}", "generate": { "skill": "ph_initial", "count": 3 } }
+    {
+      "subject": "math",
+      "title": "10のまとまり",
+      "generate": {
+        "skill": "make10",
+        "count": 4
+      }
+    },
+    {
+      "subject": "english",
+      "title": "{最初|さいしょ}の{音|おと}",
+      "generate": {
+        "skill": "ph_initial",
+        "count": 3
+      }
+    }
   ]
 }
