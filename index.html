@@ -28,22 +28,22 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --paper:#16221D; --card:#203029; --grid:rgba(255,255,255,.035); --ink:#EEF3EC; --ink2:#A6B7AD; --line:#34473D;
-    --red:#FF7B6E; --red-soft:#3D2522;
-    --math:#90BBF3; --math-bg:#1F3347; --eng:#80D3A5; --eng-bg:#1D3A2B; --rev:#F3B465; --rev-bg:#3A2D19;
+    --paper:#2C3A35; --card:#38483F; --grid:rgba(255,255,255,.045); --ink:#F2F5F0; --ink2:#C0CCC4; --line:#4E6158;
+    --red:#FF7B6E; --red-soft:#523835;
+    --math:#90BBF3; --math-bg:#34495C; --eng:#80D3A5; --eng-bg:#2F4B3C; --rev:#F3B465; --rev-bg:#4D3F2A;
     --ok:#80D3A5; --ng:#FF8C8C; --gold:#F6C453;
-    --dot-a:#90BBF3; --dot-b:#F3A86A; --dot-empty:#34473D;
-    --shadow:0 2px 0 rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.25);
+    --dot-a:#90BBF3; --dot-b:#F3A86A; --dot-empty:#56695F;
+    --shadow:0 2px 0 rgba(0,0,0,.2), 0 6px 16px rgba(0,0,0,.15);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --paper:#16221D; --card:#203029; --grid:rgba(255,255,255,.035); --ink:#EEF3EC; --ink2:#A6B7AD; --line:#34473D;
-  --red:#FF7B6E; --red-soft:#3D2522;
-  --math:#90BBF3; --math-bg:#1F3347; --eng:#80D3A5; --eng-bg:#1D3A2B; --rev:#F3B465; --rev-bg:#3A2D19;
+  --paper:#2C3A35; --card:#38483F; --grid:rgba(255,255,255,.045); --ink:#F2F5F0; --ink2:#C0CCC4; --line:#4E6158;
+  --red:#FF7B6E; --red-soft:#523835;
+  --math:#90BBF3; --math-bg:#34495C; --eng:#80D3A5; --eng-bg:#2F4B3C; --rev:#F3B465; --rev-bg:#4D3F2A;
   --ok:#80D3A5; --ng:#FF8C8C; --gold:#F6C453;
-  --dot-a:#90BBF3; --dot-b:#F3A86A; --dot-empty:#34473D;
-  --shadow:0 2px 0 rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.25);
+  --dot-a:#90BBF3; --dot-b:#F3A86A; --dot-empty:#56695F;
+  --shadow:0 2px 0 rgba(0,0,0,.2), 0 6px 16px rgba(0,0,0,.15);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -306,6 +306,9 @@ ruby rt{font-size:.5em;color:var(--ink2);font-weight:400}
 .inlinefb .bigbtn{min-height:76px;font-size:24px}
 @keyframes fbIn{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
 .inlinefb .speak,.sheet .speak{align-self:center;font-size:18px}
+/* 誤タップ防止中は少し薄く（0.28秒で戻る） */
+body.taplock #scr-quiz .answer,body.taplock .inlinefb .bigbtn,body.taplock .sheet .bigbtn{opacity:.55;transition:opacity .15s}
+#scr-quiz .answer,.inlinefb .bigbtn,.sheet .bigbtn{transition:opacity .25s}
 
 </style>
 <div class="app" id="app">
@@ -341,8 +344,17 @@ const store = {
   get(k, def) { try { const v = localStorage.getItem('hm_' + k); return v == null ? def : JSON.parse(v); } catch (e) { return def; } },
   set(k, v) { try { localStorage.setItem('hm_' + k, JSON.stringify(v)); } catch (e) {} }
 };
-const settings = Object.assign({ furi: true, sound: true, rate: 0.8, name: '', showTime: false, voice: '', autoNext: true, nextPos: 'near' }, store.get('settings', {}));
+const settings = Object.assign({ furi: true, sound: true, rate: 0.8, name: '', showTime: false, voice: '', autoNext: true, nextPos: 'near', theme: 'auto' }, store.get('settings', {}));
 const saveSettings = () => store.set('settings', settings);
+/* 画面の明るさ：明るい（初期）／暗い／スマホに合わせる */
+function applyTheme() {
+  const r = document.documentElement;
+  if (settings.theme === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', settings.theme === 'dark' ? 'dark' : 'light');
+  const m = document.querySelector('meta[name=theme-color]');
+  const dark = settings.theme === 'dark' || (settings.theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  if (m) m.setAttribute('content', dark ? '#2C3A35' : '#F5F8F3');
+}
+applyTheme();
 
 /* ---------- text formatting ----------
    {漢字|かんじ} → ふりがな   [[3/4]] → 分数   英字は自動で英語フォント */
@@ -723,6 +735,14 @@ const CHEER = ['{惜|お}しい！', '{大丈夫|だいじょうぶ}！', '{一�
 const PRACTICE = new Set(['learn', 'break', 'say']);
 let Q = null; // いまのクイズ
 
+/* 誤タップ防止：画面やボタンが切り替わってから 0.28秒 は押しても反応しない */
+const TAP_GUARD = 280;
+let tapLockUntil = 0;
+const lockTaps = () => { tapLockUntil = Date.now() + TAP_GUARD; document.body.classList.add('taplock'); clearTimeout(lockTaps.t); lockTaps.t = setTimeout(() => document.body.classList.remove('taplock'), TAP_GUARD); };
+['#scr-quiz', '#sheet'].forEach(sel => document.querySelector(sel).addEventListener('click', e => {
+  if (Date.now() < tapLockUntil && e.target.closest('button') && !e.target.closest('#qclose')) { e.stopPropagation(); e.preventDefault(); }
+}, true));
+
 function normQ(q, i, prefix) {
   q = Object.assign({}, q);
   if (q.answer != null && q.type === 'number') q.answer = [].concat(q.answer).map(Number);
@@ -754,7 +774,7 @@ function startQuiz({ title, list, setId = null, mode = 'set', subject = 'mix' })
 }
 
 function nextQ() {
-  hideSheet();
+  hideSheet(); lockTaps();
   if (!Q.queue.length) return finishQuiz();
   Q.cur = Q.queue.shift(); Q.locked = false;
   const q = Q.list[Q.cur], r = Q.res[Q.cur];
@@ -984,6 +1004,7 @@ function judge(ok, correct, selfMode) {
 /* 答えた後の表示：画面の下（シート）か、最後に押した場所の近く（大きいボタン） */
 function openSheet(kind, html) { const s = $('#sheet'); s.className = 'sheet show ' + kind; $('#sheetin').innerHTML = html; }
 function openFeedback(kind, html) {
+  lockTaps();
   const ans = $('#ans');
   if (settings.nextPos !== 'near' || !ans) return openSheet(kind, html);
   const fb = document.createElement('div'); fb.className = 'inlinefb ' + kind; fb.innerHTML = html;
@@ -1167,6 +1188,7 @@ function renderSettings() {
   $('#scr-settings').innerHTML = `${backBtn()}
     <div class="sectitle">${fmt('{設定|せってい}')}</div>
     <div class="list">
+      <div class="set"><label for="s-theme">${fmt('{画面|がめん}の{明|あか}るさ')}</label><select id="s-theme"><option value="auto">スマホに合わせる</option><option value="light">明るい</option><option value="dark">暗い</option></select></div>
       <div class="set"><label for="s-furi">${fmt('ふりがなを{出|だ}す')}</label><input type="checkbox" id="s-furi" ${settings.furi ? 'checked' : ''}></div>
       <div class="set"><label for="s-sound">${fmt('{効果音|こうかおん}')}</label><input type="checkbox" id="s-sound" ${settings.sound ? 'checked' : ''}></div>
       <div class="set"><label for="s-pos">${fmt('「{次|つぎ}へ」ボタンの{場所|ばしょ}')}</label><select id="s-pos"><option value="near">答えの近く</option><option value="bottom">画面の下</option></select></div>
@@ -1184,6 +1206,8 @@ function renderSettings() {
   fillVoices();
   $('#s-furi').onchange = e => { settings.furi = e.target.checked; saveSettings(); document.body.classList.toggle('hide-furi', !settings.furi); };
   $('#s-sound').onchange = e => { settings.sound = e.target.checked; saveSettings(); };
+  $('#s-theme').value = settings.theme || 'auto';
+  $('#s-theme').onchange = e => { settings.theme = e.target.value; saveSettings(); applyTheme(); };
   $('#s-pos').value = settings.nextPos === 'bottom' ? 'bottom' : 'near';
   $('#s-pos').onchange = e => { settings.nextPos = e.target.value; saveSettings(); };
   $('#s-auto').onchange = e => { settings.autoNext = e.target.checked; saveSettings(); };
