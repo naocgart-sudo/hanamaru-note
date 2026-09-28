@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F5F8F3">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<title>はなまるノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@700;900&display=swap">
+<style>
+:root{
+  --paper:#F5F8F3; --card:#FFFFFF; --grid:rgba(43,108,176,.075); --ink:#1D2731; --ink2:#5A6671; --line:#D6DED6;
+  --red:#E0463C; --red-soft:#FDE7E4;
+  --math:#2B6CB0; --math-bg:#E4EEFA; --eng:#2A7F55; --eng-bg:#E0F2E8; --rev:#B8620A; --rev-bg:#FBEBD5;
+  --ok:#2A7F55; --ng:#C23B3B; --gold:#E3A008;
+  --dot-a:#2B6CB0; --dot-b:#E0782C; --dot-empty:#D6DED6;
+  --shadow:0 2px 0 rgba(29,39,49,.10), 0 6px 18px rgba(29,39,49,.06);
+  --r:18px;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --f-disp:"Zen Maru Gothic","BIZ UDPGothic","Hiragino Maru Gothic ProN",system-ui,sans-serif;
+  --f-en:"Andika","BIZ UDPGothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#16221D; --card:#203029; --grid:rgba(255,255,255,.035); --ink:#EEF3EC; --ink2:#A6B7AD; --line:#34473D;
+    --red:#FF7B6E; --red-soft:#3D2522;
+    --math:#90BBF3; --math-bg:#1F3347; --eng:#80D3A5; --eng-bg:#1D3A2B; --rev:#F3B465; --rev-bg:#3A2D19;
+    --ok:#80D3A5; --ng:#FF8C8C; --gold:#F6C453;
+    --dot-a:#90BBF3; --dot-b:#F3A86A; --dot-empty:#34473D;
+    --shadow:0 2px 0 rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#16221D; --card:#203029; --grid:rgba(255,255,255,.035); --ink:#EEF3EC; --ink2:#A6B7AD; --line:#34473D;
+  --red:#FF7B6E; --red-soft:#3D2522;
+  --math:#90BBF3; --math-bg:#1F3347; --eng:#80D3A5; --eng-bg:#1D3A2B; --rev:#F3B465; --rev-bg:#3A2D19;
+  --ok:#80D3A5; --ng:#FF8C8C; --gold:#F6C453;
+  --dot-a:#90BBF3; --dot-b:#F3A86A; --dot-empty:#34473D;
+  --shadow:0 2px 0 rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-body); font-size:17px; line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px; -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--math);outline-offset:2px}
+.app{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:14px 40px;min-height:100%}
+.en{font-family:var(--f-en)}
+ruby rt{font-size:.5em;color:var(--ink2);font-weight:400}
+.hide-furi rt{display:none}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .1em;font-size:.85em}
+.frac span:first-child{border-bottom:2px solid currentColor;padding:0 .2em}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{font-family:var(--f-disp);font-weight:900;font-size:22px;margin:0;letter-spacing:.02em}
+.brand small{display:block;font-size:13px;color:var(--ink2);font-weight:400;letter-spacing:0}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);display:grid;place-items:center;flex:none}
+.iconbtn svg{width:22px;height:22px}
+
+/* stamp card */
+.stampcard{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 14px 12px;margin-bottom:14px}
+.stamphead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.stamphead b{font-family:var(--f-disp);font-size:16px}
+.streak{font-size:14px;color:var(--ink2)}
+.streak strong{font-family:var(--f-disp);font-size:24px;color:var(--red);font-variant-numeric:tabular-nums}
+.stars{font-size:14px;color:var(--ink2)}
+.stars strong{font-family:var(--f-disp);font-size:18px;color:var(--gold);font-variant-numeric:tabular-nums}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--ink2)}
+.day .slot{width:100%;max-width:44px;aspect-ratio:1;border-radius:50%;border:1.5px dashed var(--line);display:grid;place-items:center;position:relative}
+.day.is-today .slot{border-color:var(--ink2);border-style:solid}
+.day .slot svg{width:100%;height:100%}
+.stamp-in{animation:stampIn .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes stampIn{0%{transform:scale(2.2) rotate(-25deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(-8deg)}}
+
+/* main cards */
+.today{border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.today .label{font-size:13px;font-weight:700;color:var(--red);letter-spacing:.08em}
+.today h2{font-family:var(--f-disp);font-weight:900;font-size:24px;margin:2px 0 6px;text-wrap:balance;line-height:1.35}
+.today .msg{background:var(--red-soft);border-radius:12px;padding:10px 12px;font-size:15px;margin:10px 0 12px;position:relative}
+.today .msg::before{content:"パパより";display:block;font-size:11px;font-weight:700;color:var(--red);letter-spacing:.1em;margin-bottom:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.chip{font-size:13px;padding:3px 10px;border-radius:99px;background:var(--paper);border:1px solid var(--line);white-space:nowrap}
+.chip.math{background:var(--math-bg);border-color:transparent;color:var(--math)}
+.chip.english{background:var(--eng-bg);border-color:transparent;color:var(--eng)}
+.bigbtn{width:100%;min-height:58px;border:none;border-radius:16px;background:var(--ink);color:var(--paper);font-family:var(--f-disp);font-weight:900;font-size:20px;letter-spacing:.05em;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:transform .08s}
+.bigbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.bigbtn.red{background:var(--red);color:#fff}
+.bigbtn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.bigbtn[disabled]{opacity:.4}
+.done-mark{position:absolute;right:4px;top:4px;width:92px;height:auto;opacity:.9;pointer-events:none}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tile{border:none;border-radius:var(--r);padding:14px;text-align:left;min-height:108px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);transition:transform .08s}
+.tile:active{transform:scale(.97)}
+.tile b{font-family:var(--f-disp);font-size:18px;font-weight:900;line-height:1.3}
+.tile span{font-size:13px;opacity:.85}
+.tile .num{font-family:var(--f-disp);font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}
+.tile.math{background:var(--math-bg);color:var(--math)}
+.tile.english{background:var(--eng-bg);color:var(--eng)}
+.tile.review{background:var(--rev-bg);color:var(--rev)}
+.tile.plain{background:var(--card);color:var(--ink)}
+
+.sectitle{font-family:var(--f-disp);font-weight:900;font-size:18px;margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:none;border-radius:14px;padding:12px 14px;text-align:left;box-shadow:var(--shadow);width:100%}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-size:16px}
+.row .t small{color:var(--ink2);font-size:13px}
+.row .badge{font-family:var(--f-disp);font-weight:900;font-size:15px;font-variant-numeric:tabular-nums;color:var(--red)}
+.back{display:inline-flex;align-items:center;gap:6px;border:none;background:none;padding:8px 0;font-size:15px;color:var(--ink2)}
+.muted{color:var(--ink2);font-size:14px}
+
+.skillgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.skill{border:none;border-radius:14px;padding:12px;text-align:left;box-shadow:var(--shadow);background:var(--card);min-height:76px;display:flex;flex-direction:column;gap:2px}
+.skill b{font-size:16px}
+.skill small{font-size:12.5px;color:var(--ink2);line-height:1.4}
+.skill .ex{font-family:var(--f-disp);font-weight:700;font-size:15px;color:var(--math)}
+.skill.english .ex{color:var(--eng);font-family:var(--f-en)}
+.danrow{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.dan{min-width:52px;height:48px;border-radius:12px;border:none;background:var(--math-bg);color:var(--math);font-family:var(--f-disp);font-weight:900;font-size:17px}
+
+/* quiz */
+.qtop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.bar{flex:1;display:flex;gap:3px;height:12px}
+.bar i{flex:1;border-radius:6px;background:var(--line);transition:background .3s}
+.bar i.ok{background:var(--ok)}
+.bar i.ng{background:var(--rev)}
+.bar i.now{background:var(--ink2)}
+.qcount{font-family:var(--f-disp);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink2);min-width:3.5em;text-align:right}
+.qcard{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 16px;position:relative;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+.qsub{font-size:13px;font-weight:700;letter-spacing:.08em;padding:2px 10px;border-radius:99px}
+.qsub.math{background:var(--math-bg);color:var(--math)}
+.qsub.english{background:var(--eng-bg);color:var(--eng)}
+.qsub.review{background:var(--rev-bg);color:var(--rev)}
+.prompt{font-size:22px;line-height:1.6;font-weight:700;text-wrap:balance;max-width:100%;overflow-wrap:anywhere}
+.prompt.big{font-family:var(--f-disp);font-size:clamp(36px,11vw,52px);font-weight:900;letter-spacing:.03em;line-height:1.3;font-variant-numeric:tabular-nums}
+.prompt .en,.opt .en{font-family:var(--f-en)}
+.speak{display:inline-flex;align-items:center;gap:8px;border:none;background:var(--eng-bg);color:var(--eng);border-radius:99px;padding:10px 18px;font-weight:700;font-size:16px}
+.speak svg{width:24px;height:24px}
+.speak.slow{background:transparent;border:1.5px solid var(--eng);padding:8px 14px;font-size:14px}
+.speakrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.hintbtn{border:1.5px dashed var(--ink2);background:none;border-radius:99px;padding:6px 16px;font-size:14px;color:var(--ink2)}
+.visual{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:100%}
+.frames{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.frame{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:6px;border:2px solid var(--line);border-radius:8px}
+.frame i{width:22px;height:22px;border-radius:50%;background:transparent;border:2px dashed var(--dot-empty)}
+.frame i.a{background:var(--dot-a);border-color:var(--dot-a)}
+.frame i.b{background:var(--dot-b);border-color:var(--dot-b)}
+.frame i.x{position:relative;opacity:.35}
+.frame i.x::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;background:var(--red);transform:rotate(-45deg)}
+.arr{display:grid;gap:3px}
+.arr i{width:14px;height:14px;border-radius:50%;background:var(--dot-a)}
+.vcap{font-size:13px;color:var(--ink2)}
+.maru{overflow:visible}
+.maru path{fill:none;stroke:var(--red);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.maru path.petal{stroke-width:5}
+.maru.draw path{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw .75s ease-out forwards}
+.maru.draw path.petal{animation-delay:.25s;animation-duration:.6s}
+.hanamaru{position:absolute;inset:0;margin:auto;width:min(260px,80%);height:auto;pointer-events:none;z-index:3}
+@keyframes draw{to{stroke-dashoffset:0}}
+.shake{animation:shake .35s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+
+.answer{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.boxes{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:18px;font-weight:700}
+.box{min-width:96px;height:68px;border-radius:14px;border:3px solid var(--line);background:var(--card);font-family:var(--f-disp);font-weight:900;font-size:38px;display:grid;place-items:center;padding:0 12px;font-variant-numeric:tabular-nums}
+.box.active{border-color:var(--math);box-shadow:0 0 0 4px var(--math-bg)}
+.box.empty::after{content:"?";color:var(--line)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pad button{height:62px;border:none;border-radius:14px;background:var(--card);box-shadow:var(--shadow);font-family:var(--f-disp);font-weight:900;font-size:28px;font-variant-numeric:tabular-nums}
+.pad button:active{transform:translateY(2px);box-shadow:none}
+.pad button.del{font-size:18px;color:var(--ink2)}
+.pad button.go{background:var(--ink);color:var(--paper);font-size:19px}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{min-height:64px;border:2.5px solid var(--line);background:var(--card);border-radius:16px;font-size:21px;font-weight:700;padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;transition:transform .08s}
+.opt:active{transform:scale(.97)}
+.opt.right{border-color:var(--ok);background:var(--eng-bg)}
+.opt.wrong{border-color:var(--ng);opacity:.6}
+.optrow{display:flex;gap:8px;align-items:stretch}
+.optrow .opt{flex:1}
+.optrow .say{width:60px;border-radius:16px;border:none;background:var(--eng-bg);color:var(--eng);display:grid;place-items:center}
+.optrow .say svg{width:24px;height:24px}
+.line{min-height:62px;border-bottom:3px solid var(--ink2);display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;justify-content:center;padding:6px 4px}
+.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
+.word{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:8px 14px;font-family:var(--f-en);font-size:21px;font-weight:700;box-shadow:var(--shadow)}
+.word.used{visibility:hidden}
+.textin{width:100%;height:62px;border-radius:14px;border:3px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--f-en);font-size:26px;text-align:center;padding:0 12px}
+.selfans{background:var(--paper);border-radius:14px;padding:12px;font-size:20px;font-weight:700;text-align:center}
+.selfbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* feedback sheet */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));background:var(--card);border-radius:22px 22px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.18);transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.9,.3,1.1)}
+.sheet.show{transform:none}
+.sheet .in{max-width:528px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.sheet h3{margin:0;font-family:var(--f-disp);font-weight:900;font-size:26px}
+.sheet.good h3{color:var(--ok)}
+.sheet.bad h3{color:var(--rev)}
+.sheet .correct{font-size:18px}
+.sheet .correct b{font-family:var(--f-disp);font-size:26px;color:var(--ink);margin-left:6px}
+.steps{margin:0;padding:10px 12px 10px 34px;background:var(--paper);border-radius:12px;font-size:17px;line-height:1.8}
+.steps li::marker{font-family:var(--f-disp);font-weight:700;color:var(--ink2)}
+
+/* result */
+.result{text-align:center;padding-top:10px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.result h2{font-family:var(--f-disp);font-weight:900;font-size:30px;margin:0}
+.bigmaru{width:200px;height:200px;position:relative}
+.bigmaru svg{width:100%;height:100%}
+.bigmaru .score{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-disp);font-weight:900;font-size:44px;color:var(--red);font-variant-numeric:tabular-nums}
+.bigmaru .score small{display:block;font-size:16px;color:var(--ink2);font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.stat{background:var(--card);border-radius:14px;padding:10px 6px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--f-disp);font-size:24px;font-weight:900;font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--ink2)}
+.starpop{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;min-height:30px}
+.starpop svg{width:26px;height:26px;animation:pop .4s cubic-bezier(.2,1.8,.4,1) both}
+@keyframes pop{from{transform:scale(0) rotate(-90deg)}to{transform:none}}
+.report{font-size:14px;color:var(--ink2)}
+.btncol{display:flex;flex-direction:column;gap:10px;width:100%}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:30}
+
+/* settings */
+.set{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+.set label{flex:1}
+.set input[type=checkbox]{width:26px;height:26px;accent-color:var(--ink)}
+.set select{font:inherit;padding:6px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.danger{color:var(--ng);border-color:var(--ng)!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:99px;font-size:15px;z-index:40;transition:transform .25s;max-width:calc(100% - 32px)}
+.toast.show{transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+</style>
+<div class="app" id="app">
+  <section id="scr-home"></section>
+  <section id="scr-quiz" hidden></section>
+  <section id="scr-result" hidden></section>
+  <section id="scr-drill" hidden></section>
+  <section id="scr-history" hidden></section>
+  <section id="scr-settings" hidden></section>
+</div>
+<div class="sheet" id="sheet"><div class="in" id="sheetin"></div></div>
+<canvas id="confetti" hidden></canvas>
+<div class="toast" id="toast"></div>
+
+<script>
+/* はなまるノート — core */
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pad2 = n => String(n).padStart(2, '0');
+const iso = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => iso(new Date());
+const addDays = (s, n) => { const d = new Date(s + 'T00:00:00'); d.setDate(d.getDate() + n); return iso(d); };
+const WD = ['日','月','火','水','木','金','土'];
+const jdate = s => { const d = new Date(s + 'T00:00:00'); return `${d.getMonth() + 1}/${d.getDate()}(${WD[d.getDay()]})`; };
+
+/* ---------- storage (always guarded) ---------- */
+const store = {
+  get(k, def) { try { const v = localStorage.getItem('hm_' + k); return v == null ? def : JSON.parse(v); } catch (e) { return def; } },
+  set(k, v) { try { localStorage.setItem('hm_' + k, JSON.stringify(v)); } catch (e) {} }
+};
+const settings = Object.assign({ furi: true, sound: true, rate: 0.8, name: '' }, store.get('settings', {}));
+const saveSettings = () => store.set('settings', settings);
+
+/* ---------- text formatting ----------
+   {漢字|かんじ} → ふりがな   [[3/4]] → 分数   英字は自動で英語フォント */
+function plain(t) {
+  return t.split(/([A-Za-z][A-Za-z'’,.!?\-/ ]*)/).map((p, i) => i % 2 ? `<span class="en">${esc(p)}</span>` : esc(p)).join('').replace(/\n/g, '<br>');
+}
+function fmt(s) {
+  s = String(s ?? ''); let out = '', last = 0, m;
+  const re = /\{([^|{}]+)\|([^{}]+)\}|\[\[(\d+)\/(\d+)\]\]/g;
+  while ((m = re.exec(s))) {
+    out += plain(s.slice(last, m.index));
+    out += m[1] ? `<ruby>${esc(m[1])}<rt>${esc(m[2])}</rt></ruby>` : `<span class="frac"><span>${m[3]}</span><span>${m[4]}</span></span>`;
+    last = re.lastIndex;
+  }
+  return out + plain(s.slice(last));
+}
+const bare = s => String(s ?? '').replace(/\{([^|{}]+)\|[^{}]+\}/g, '$1').replace(/\[\[(\d+)\/(\d+)\]\]/g, '$1/$2');
+
+/* ---------- icons ---------- */
+const ICON = {
+  speaker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>',
+  back: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="var(--gold)"/></svg>',
+};
+function stampSVG(label = 'できた', anim = false) {
+  return `<svg viewBox="0 0 100 100" class="${anim ? 'stamp-in' : ''}" style="transform:rotate(-8deg)"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--red)" stroke-width="5"/><circle cx="50" cy="50" r="36" fill="none" stroke="var(--red)" stroke-width="2"/><text x="50" y="59" text-anchor="middle" font-family="Zen Maru Gothic, sans-serif" font-weight="900" font-size="${label.length > 3 ? 17 : 21}" fill="var(--red)">${esc(label)}</text></svg>`;
+}
+/* 赤ペンのはなまる（うずまき＋花びら） */
+function hanamaruPath(cx = 130, cy = 120) {
+  let d = '', turns = 1.35, steps = 90;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps, a = -Math.PI / 2 + t * turns * Math.PI * 2 + 0.6, r = 18 + t * 62;
+    const x = cx + Math.cos(a) * r * 1.12, y = cy + Math.sin(a) * r;
+    d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+  }
+  let p = '', N = 11, R = 94;
+  for (let i = 0; i <= N; i++) {
+    const a = -Math.PI / 2 + i / N * Math.PI * 2 + 0.3, x = cx + Math.cos(a) * R * 1.1, y = cy + Math.sin(a) * R;
+    if (!i) { p += `M${x.toFixed(1)} ${y.toFixed(1)}`; continue; }
+    const am = a - Math.PI / N, cxp = cx + Math.cos(am) * (R + 34) * 1.1, cyp = cy + Math.sin(am) * (R + 34);
+    p += `Q${cxp.toFixed(1)} ${cyp.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }
+  return { spiral: d, petals: p };
+}
+function hanamaruSVG(cls = 'draw hanamaru') {
+  const h = hanamaruPath();
+  return `<svg class="maru ${cls}" viewBox="0 0 260 240" aria-hidden="true"><path d="${h.spiral}"/><path class="petal" d="${h.petals}"/></svg>`;
+}
+
+/* ---------- sound / speech / vibration ---------- */
+let AC = null;
+function tone(freqs, dur = .13, type = 'sine', gap = .11, vol = .18) {
+  if (!settings.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    freqs.forEach((f, i) => {
+      const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + i * gap;
+      o.type = type; o.frequency.value = f; o.connect(g); g.connect(AC.destination);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + dur + .25);
+      o.start(t); o.stop(t + dur + .3);
+    });
+  } catch (e) {}
+}
+const sndOk = () => tone([1046.5, 1318.5], .12, 'sine', .12);
+const sndNg = () => tone([392, 330], .14, 'triangle', .14, .12);
+const sndFin = () => tone([784, 988, 1175, 1568], .14, 'sine', .1);
+const buzz = p => { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} };
+let VOICE = null;
+function pickVoice() {
+  try {
+    const vs = speechSynthesis.getVoices();
+    VOICE = vs.find(v => /en[-_]US/i.test(v.lang) && /Google/i.test(v.name)) || vs.find(v => /en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
+  } catch (e) {}
+}
+try { speechSynthesis.onvoiceschanged = pickVoice; pickVoice(); } catch (e) {}
+function say(text, slow) {
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US'; if (VOICE) u.voice = VOICE;
+    u.rate = slow ? 0.5 : settings.rate;
+    speechSynthesis.speak(u);
+  } catch (e) { toast('この端末では読み上げが使えません'); }
+}
+
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.innerHTML = fmt(msg); t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---------- screens ---------- */
+const SCREENS = ['home', 'quiz', 'result', 'drill', 'history', 'settings'];
+function show(name) {
+  SCREENS.forEach(s => { $('#scr-' + s).hidden = s !== name; });
+  document.body.classList.toggle('hide-furi', !settings.furi);
+  window.scrollTo(0, 0);
+}
+
+/* ---------- 問題ジェネレータ ----------
+   セットのJSONで {"generate":{"skill":"add_carry1","count":10}} と書くと自動で作られる */
+const M = '−', X = '×', D = '÷';
+const num = (prompt, ans, extra = {}) => Object.assign({ type: 'number', subject: 'math', prompt, big: true, answer: [].concat(ans) }, extra);
+
+const GEN = {
+  make10() {
+    const a = rnd(1, 9);
+    return num(`${a} と □ で 10`, 10 - a, { big: false, key: `m10:${a}`, visual: { kind: 'frame', a }, hintShow: true,
+      explain: [`あいている○を かぞえる`, `${a} + ${10 - a} = 10`] });
+  },
+  add_small() {
+    const a = rnd(1, 9), b = rnd(1, 10 - a);
+    return num(`${a} + ${b} =`, a + b, { key: `as:${a}+${b}`, visual: { kind: 'dots', a, b }, explain: [`${a} から ${b} こ すすむ`, `${a} + ${b} = ${a + b}`] });
+  },
+  add_carry1() {
+    let a, b; do { a = rnd(2, 9); b = rnd(2, 9); } while (a + b <= 10);
+    const need = 10 - a, rest = b - need;
+    return num(`${a} + ${b} =`, a + b, { key: `ac:${a}+${b}`, visual: { kind: 'dots', a, b },
+      explain: [`${b} を ${need} と ${rest} に わける`, `${a} + ${need} = 10（10のまとまり）`, `10 + ${rest} = ${a + b}`] });
+  },
+  sub_small() {
+    const a = rnd(2, 10), b = rnd(1, a - 1);
+    return num(`${a} ${M} ${b} =`, a - b, { key: `ss:${a}-${b}`, visual: { kind: 'sub', a, b }, explain: [`${a} こから ${b} こ とる`, `のこりは ${a - b}`] });
+  },
+  sub_borrow() {
+    let a, b; do { a = rnd(11, 18); b = rnd(2, 9); } while (a - 10 >= b);
+    return num(`${a} ${M} ${b} =`, a - b, { key: `sb:${a}-${b}`, visual: { kind: 'sub', a, b },
+      explain: [`${a} を 10 と ${a - 10} に わける`, `10 ${M} ${b} = ${10 - b}`, `${10 - b} + ${a - 10} = ${a - b}`] });
+  },
+  mix1() { return pick([GEN.add_small, GEN.add_carry1, GEN.sub_small, GEN.sub_borrow])(); },
+  add2(p = {}) {
+    let a, b, c; do { a = rnd(10, 79); b = rnd(10, 99 - a); c = (a % 10) + (b % 10) >= 10; } while (p.carry === false && c || p.carry === true && !c);
+    const o = a % 10 + b % 10, t = Math.floor(a / 10) + Math.floor(b / 10) + (o >= 10 ? 1 : 0);
+    return num(`${a} + ${b} =`, a + b, { key: `a2:${a}+${b}`,
+      explain: [`{一|いち}の{位|くらい}: ${a % 10} + ${b % 10} = ${o}` + (o >= 10 ? '（10をくり上げる）' : ''), `{十|じゅう}の{位|くらい}: ${Math.floor(a / 10)} + ${Math.floor(b / 10)}` + (o >= 10 ? ' + 1' : '') + ` = ${t}`, `こたえ ${a + b}`] });
+  },
+  sub2(p = {}) {
+    let a, b, c; do { a = rnd(20, 99); b = rnd(10, a - 1); c = a % 10 < b % 10; } while (p.borrow === false && c || p.borrow === true && !c);
+    const bor = a % 10 < b % 10, o = (bor ? 10 : 0) + a % 10 - b % 10, t = Math.floor(a / 10) - (bor ? 1 : 0) - Math.floor(b / 10);
+    return num(`${a} ${M} ${b} =`, a - b, { key: `s2:${a}-${b}`,
+      explain: [bor ? `{一|いち}の{位|くらい}: ${a % 10} から ${b % 10} はひけない → {十|じゅう}の{位|くらい}から10かりる → ${10 + a % 10} ${M} ${b % 10} = ${o}` : `{一|いち}の{位|くらい}: ${a % 10} ${M} ${b % 10} = ${o}`,
+        `{十|じゅう}の{位|くらい}: ${Math.floor(a / 10)}` + (bor ? ` ${M} 1` : '') + ` ${M} ${Math.floor(b / 10)} = ${t}`, `こたえ ${a - b}`] });
+  },
+  kuku(p = {}) {
+    const d = p.dan && p.dan !== 'mix' ? +p.dan : rnd(2, 9), n = rnd(1, 9);
+    const seq = Array.from({ length: n }, (_, i) => d * (i + 1)).join(', ');
+    return num(`${d} ${X} ${n} =`, d * n, { key: `k:${d}x${n}`, visual: { kind: 'array', r: n, c: d },
+      explain: [`${d} を ${n} {回|かい} たす`, `${seq}`, `${d} ${X} ${n} = ${d * n}`] });
+  },
+  div_kuku() {
+    const d = rnd(2, 9), q = rnd(1, 9);
+    return num(`${d * q} ${D} ${d} =`, q, { key: `dk:${d * q}/${d}`,
+      explain: [`${d} ${X} □ = ${d * q} の □ をさがす（${d}のだん）`, `${d} ${X} ${q} = ${d * q}`, `こたえ ${q}`] });
+  },
+  div_rem() {
+    const d = rnd(2, 9), q = rnd(1, 9), r = rnd(1, d - 1), n = d * q + r;
+    return num(`${n} ${D} ${d} =`, [q, r], { key: `dr:${n}/${d}`, fields: [{}, { pre: 'あまり' }],
+      explain: [`${d}のだんで ${n} をこえない いちばん{大|おお}きい{数|かず}`, `${d} ${X} ${q} = ${d * q}`, `${n} ${M} ${d * q} = ${r} → あまり ${r}`] });
+  },
+  mul21() {
+    const a = rnd(11, 49), b = rnd(2, 9), t = Math.floor(a / 10) * 10, o = a % 10;
+    return num(`${a} ${X} ${b} =`, a * b, { key: `m21:${a}x${b}`,
+      explain: [`${a} を ${t} と ${o} に わける`, `${t} ${X} ${b} = ${t * b}`, `${o} ${X} ${b} = ${o * b}`, `${t * b} + ${o * b} = ${a * b}`] });
+  },
+  place() {
+    const n = rnd(1000, 9999), s = String(n), names = ['千', '百', '十', '一'], yomi = ['せん', 'ひゃく', 'じゅう', 'いち'], i = rnd(0, 3);
+    return num(`${n} の {${names[i]}|${yomi[i]}}の{位|くらい}の{数字|すうじ}は？`, +s[i], { big: false, key: `pl:${n}:${i}`,
+      explain: [s.split('').map((c, j) => `${names[j]}:${c}`).join('　'), `{${names[i]}|${yomi[i]}}の{位|くらい}は ${s[i]}`] });
+  },
+
+  /* ---- えいご：フォニックス ---- */
+  ph_initial() {
+    const w = pick(PH.cvc.flatMap(g => g.words)), c = w[0];
+    const others = shuffle('bcdfghjklmnprstvwz'.split('').filter(x => x !== c)).slice(0, 3);
+    return { type: 'choice', subject: 'english', key: `pi:${w}`, prompt: `きいて、はじめの{音|おと}をえらぼう`, speak: w, autoSpeak: true,
+      options: shuffle([c, ...others]), answer: c, two: true, reveal: w, explain: [`${w} は ${c} の{音|おと}ではじまる`] };
+  },
+  ph_vowel() {
+    const g = pick(PH.cvc), w = pick(g.words);
+    return { type: 'choice', subject: 'english', key: `pv:${w}`, prompt: `きいて、まん{中|なか}の{音|おと}をえらぼう\n${w[0]} _ ${w[2]}`, speak: w, autoSpeak: true,
+      options: ['a', 'e', 'i', 'o', 'u'], fixed: true, answer: g.v, reveal: w, explain: [`${w} のまん{中|なか}は ${g.v}`, `${g.v} の{音|おと}: ${g.tip}`] };
+  },
+  ph_word() {
+    const set = pick(PH.pairs), w = pick(set);
+    return { type: 'choice', subject: 'english', key: `pw:${w}`, prompt: `きこえた{単語|たんご}はどれ？`, speak: w, autoSpeak: true,
+      options: shuffle(set), answer: w, explain: [`{正解|せいかい}は ${w}`, `ほかの{単語|たんご}も{聞|き}きくらべてみよう`], speakOptions: true };
+  },
+  ph_digraph() {
+    const g = pick(PH.digraph), w = pick(g.words), blank = w.replace(g.d, '__');
+    return { type: 'choice', subject: 'english', key: `pd:${w}`, prompt: `きいて、□に{入|はい}る2{文字|もじ}は？\n${blank}`, speak: w, autoSpeak: true,
+      options: shuffle(PH.digraph.map(x => x.d)), answer: g.d, two: true, reveal: w, explain: [`${w} → ${g.d}`, `${g.d}: ${g.tip}`] };
+  },
+  ph_magic() {
+    const pr = pick(PH.magic), i = rnd(0, 1), w = pr[i];
+    return { type: 'choice', subject: 'english', key: `pm:${w}`, prompt: `きこえたのはどっち？`, speak: w, autoSpeak: true,
+      options: shuffle(pr), answer: w, two: true, speakOptions: true,
+      explain: [`${pr[0]} → ${pr[1]}`, `おわりの e は{読|よ}まない。まえの{母音|ぼいん}がアルファベットの{名前|なまえ}{読|よ}みになる（a→エイ、i→アイ、o→オウ、u→ユー）`] };
+  },
+  ph_symbol() {
+    const s = pick(PH.symbol), w = pick(s.words);
+    const others = shuffle(PH.symbol.filter(x => x.sym !== s.sym && !x.words.some(y => s.words.includes(y)))).slice(0, 2).map(x => pick(x.words));
+    return { type: 'choice', subject: 'english', key: `ps:${s.sym}:${w}`, prompt: `/${s.sym}/ の{音|おと}が{入|はい}っているのは？\n${s.tip}`,
+      options: shuffle([w, ...others]), answer: w, speakOptions: true, explain: [`/${s.sym}/ → ${s.words.join(', ')}`, s.tip] };
+  },
+};
+
+const PH = {
+  cvc: [
+    { v: 'a', tip: '「エ」の{口|くち}で「ア」', words: ['cat', 'bat', 'hat', 'map', 'bag', 'cap', 'fan', 'jam', 'pan', 'rat'] },
+    { v: 'e', tip: 'みじかく「エ」', words: ['bed', 'pen', 'hen', 'jet', 'leg', 'net', 'red', 'ten', 'web', 'pet'] },
+    { v: 'i', tip: 'みじかく「イ」（すこし「エ」より）', words: ['pig', 'sit', 'big', 'pin', 'lip', 'six', 'zip', 'kid', 'hit', 'dig'] },
+    { v: 'o', tip: '{口|くち}を{大|おお}きく「ア」（アメリカ{英語|えいご}）', words: ['dog', 'hot', 'box', 'fox', 'pot', 'mop', 'top', 'log'] },
+    { v: 'u', tip: 'みじかく、{力|ちから}をぬいて「ア」', words: ['cup', 'bus', 'sun', 'run', 'bug', 'hug', 'mud', 'nut'] },
+  ],
+  pairs: [['cat', 'cut', 'cot'], ['bag', 'big', 'bug'], ['pen', 'pin', 'pan'], ['hat', 'hit', 'hot'], ['bed', 'bad', 'bid'],
+    ['ten', 'tan', 'tin'], ['map', 'mop'], ['sit', 'set', 'sat'], ['fan', 'fun', 'fin'], ['lock', 'lick', 'luck'], ['pet', 'pit', 'pot'], ['hug', 'hog']],
+  digraph: [
+    { d: 'sh', tip: 'しーっ と{息|いき}だけで「シュ」', words: ['ship', 'shop', 'fish', 'dish', 'shell', 'wish'] },
+    { d: 'ch', tip: '「チ」とはじく', words: ['chip', 'chin', 'lunch', 'chop', 'rich', 'much'] },
+    { d: 'th', tip: '{舌|した}を{歯|は}で{軽|かる}くはさむ', words: ['thin', 'math', 'bath', 'this', 'that', 'with'] },
+    { d: 'ck', tip: 'k と{同|おな}じ「ク」', words: ['duck', 'back', 'kick', 'sock', 'neck', 'rock'] },
+  ],
+  magic: [['cap', 'cape'], ['tap', 'tape'], ['kit', 'kite'], ['pin', 'pine'], ['hop', 'hope'], ['cub', 'cube'], ['not', 'note'], ['man', 'mane'], ['rid', 'ride'], ['tub', 'tube'], ['bit', 'bite'], ['can', 'cane']],
+  symbol: [
+    { sym: 'æ', tip: '「エ」の{口|くち}で「ア」と{言|い}う', words: ['cat', 'apple', 'bag', 'hand'] },
+    { sym: 'ʌ', tip: 'みじかく{軽|かる}い「ア」', words: ['cup', 'bus', 'sun', 'love'] },
+    { sym: 'ɪ', tip: 'みじかい「イ」', words: ['sit', 'pig', 'fish', 'milk'] },
+    { sym: 'iː', tip: '{口|くち}を{横|よこ}に{引|ひ}いて「イー」', words: ['see', 'tree', 'eat', 'green'] },
+    { sym: 'ʃ', tip: '{息|いき}だけの「シュ」', words: ['ship', 'fish', 'shoe', 'shop'] },
+    { sym: 'θ', tip: '{舌|した}を{歯|は}ではさんで{息|いき}だけ', words: ['thin', 'math', 'three', 'bath'] },
+    { sym: 'ð', tip: '{舌|した}を{歯|は}ではさんで{声|こえ}を{出|だ}す', words: ['this', 'that', 'mother', 'the'] },
+    { sym: 'r', tip: '{舌|した}をどこにもつけずに「ゥル」', words: ['red', 'run', 'rice', 'rain'] },
+    { sym: 'l', tip: '{舌|した}の{先|さき}を{上|うわ}の{歯|は}のうらにつける', words: ['leg', 'lip', 'lion', 'lemon'] },
+  ],
+};
+
+const SKILLS = {
+  math: [
+    { id: 'make10', name: '10のまとまり', ex: '7 と □ で 10' },
+    { id: 'add_small', name: 'たし{算|ざん}（10まで）', ex: '4 + 3' },
+    { id: 'add_carry1', name: 'くり{上|あ}がりのたし{算|ざん}', ex: '8 + 5' },
+    { id: 'sub_small', name: 'ひき{算|ざん}（10まで）', ex: `9 ${M} 4` },
+    { id: 'sub_borrow', name: 'くり{下|さ}がりのひき{算|ざん}', ex: `13 ${M} 5` },
+    { id: 'mix1', name: 'たし{算|ざん}・ひき{算|ざん} まぜる', ex: `8 + 5 / 13 ${M} 5` },
+    { id: 'add2', name: '2けたのたし{算|ざん}', ex: '38 + 25' },
+    { id: 'sub2', name: '2けたのひき{算|ざん}', ex: `52 ${M} 27` },
+    { id: 'kuku', name: '{九九|くく}', ex: `7 ${X} 6`, dan: true },
+    { id: 'div_kuku', name: 'わり{算|ざん}', ex: `42 ${D} 7` },
+    { id: 'div_rem', name: 'あまりのあるわり{算|ざん}', ex: `23 ${D} 4` },
+    { id: 'mul21', name: '2けた × 1けた', ex: `23 ${X} 4` },
+    { id: 'place', name: '{位|くらい}', ex: '3456 の{百|ひゃく}の{位|くらい}' },
+  ],
+  english: [
+    { id: 'ph_initial', name: 'はじめの{音|おと}', ex: 'b / d / m ?' },
+    { id: 'ph_vowel', name: 'まん{中|なか}の{母音|ぼいん}', ex: 'c _ t' },
+    { id: 'ph_word', name: '{聞|き}き{分|わ}け', ex: 'cat / cut / cot' },
+    { id: 'ph_digraph', name: 'sh・ch・th・ck', ex: '__ip' },
+    { id: 'ph_magic', name: 'マジック e', ex: 'cap → cape' },
+    { id: 'ph_symbol', name: '{発音|はつおん}{記号|きごう}', ex: '/æ/ /θ/ /ʃ/' },
+  ],
+};
+const skillName = id => bare((SKILLS.math.concat(SKILLS.english).find(s => s.id === id) || { name: id }).name);
+
+/* count問つくる（同じ問題がなるべく続かないように） */
+function generate(skill, count = 10, params = {}) {
+  const f = GEN[skill]; if (!f) return [];
+  const out = [], seen = new Set();
+  for (let tries = 0; out.length < count && tries < count * 30; tries++) {
+    const q = f(params);
+    if (seen.has(q.key) && tries < count * 20) continue;
+    seen.add(q.key); q.id = 'g:' + q.key; q.skill = skill; out.push(q);
+  }
+  return out;
+}
+
+/* ---------- 出題エンジン ---------- */
+const SUBJ = { math: '{数学|すうがく}', english: '{英語|えいご}', review: 'ふくしゅう', other: 'その{他|ほか}' };
+const PRAISE = ['せいかい！', 'いいね！', 'その ちょうし！', 'すごい！', 'ばっちり！', 'かんぺき！'];
+const CHEER = ['おしい！', 'だいじょうぶ！', 'いっしょに たしかめよう'];
+let Q = null; // いまのクイズ
+
+function normQ(q, i, prefix) {
+  q = Object.assign({}, q);
+  if (q.answer != null && q.type === 'number') q.answer = [].concat(q.answer).map(Number);
+  if (!q.type) q.type = q.options ? 'choice' : 'self';
+  if (!q.id) q.id = prefix + ':' + i;
+  return q;
+}
+function buildSet(set) {
+  const list = [];
+  (set.sections || []).forEach((sec, si) => {
+    let qs = [];
+    if (sec.generate) qs = qs.concat(generate(sec.generate.skill, sec.generate.count || 10, sec.generate));
+    (sec.questions || []).forEach((q, qi) => qs.push(normQ(Object.assign({ subject: sec.subject }, q), `${si}-${qi}`, set.id)));
+    if (sec.shuffle) qs = shuffle(qs);
+    qs.forEach(q => { q.subject = q.subject || sec.subject || 'other'; });
+    list.push(...qs);
+  });
+  return list;
+}
+
+function startQuiz({ title, list, setId = null, mode = 'set', subject = 'mix' }) {
+  if (!list.length) { toast('{問題|もんだい}がありません'); return; }
+  Q = { title, list, setId, mode, subject, queue: list.map((_, i) => i), res: list.map(() => ({ first: null, tries: 0, done: false })), cur: -1, start: Date.now(), locked: false };
+  show('quiz'); nextQ();
+}
+
+function progressBar() {
+  return `<div class="bar">${Q.res.map((r, i) => `<i class="${i === Q.cur && !r.done ? 'now' : r.done ? (r.first ? 'ok' : 'ng') : r.first === false ? 'ng' : ''}"></i>`).join('')}</div>`;
+}
+function nextQ() {
+  hideSheet();
+  if (!Q.queue.length) return finishQuiz();
+  Q.cur = Q.queue.shift(); Q.locked = false;
+  const q = Q.list[Q.cur], r = Q.res[Q.cur];
+  const done = Q.res.filter(x => x.done).length;
+  const subj = Q.mode === 'review' ? 'review' : q.subject;
+  $('#scr-quiz').innerHTML = `
+    <div class="qtop"><button class="iconbtn" id="qclose" aria-label="やめる">${ICON.close}</button>${progressBar()}<span class="qcount">${done + 1}/${Q.list.length}</span></div>
+    <div class="qcard" id="qcard">
+      <span class="qsub ${subj}">${fmt(SUBJ[subj] || SUBJ.other)}${r.tries ? '・もう{一度|いちど}' : ''}</span>
+      ${q.image ? `<img src="${esc(q.image)}" alt="" style="max-height:180px;border-radius:12px">` : ''}
+      <div class="prompt ${q.big ? 'big' : ''}">${fmt(q.prompt)}</div>
+      ${q.speak ? `<div class="speakrow"><button class="speak" id="say">${ICON.speaker}きく</button><button class="speak slow" id="sayslow">ゆっくり</button></div>` : ''}
+      ${q.visual ? (q.hintShow ? `<div class="visual">${visual(q.visual)}</div>` : `<button class="hintbtn" id="hint">ヒントを{見|み}る</button><div class="visual" id="vis" hidden>${visual(q.visual)}</div>`) : ''}
+      ${!q.visual && q.hint ? `<button class="hintbtn" id="hint">ヒントを{見|み}る</button><div class="muted" id="vis" hidden>${fmt(q.hint)}</div>` : ''}
+    </div>
+    <div class="answer" id="ans"></div>`;
+  $$('#scr-quiz .hintbtn').forEach(b => b.innerHTML = fmt(b.textContent));
+  $('#qclose').onclick = confirmQuit;
+  if ($('#hint')) $('#hint').onclick = () => { $('#vis').hidden = false; $('#hint').remove(); };
+  if (q.speak) { $('#say').onclick = () => say(q.speak); $('#sayslow').onclick = () => say(q.speak, true); if (q.autoSpeak) setTimeout(() => say(q.speak), 350); }
+  ({ number: ansNumber, choice: ansChoice, order: ansOrder, text: ansText, self: ansSelf }[q.type] || ansSelf)(q);
+}
+
+let quitArm = 0;
+function confirmQuit() {
+  if (Date.now() - quitArm < 2500) { Q = null; hideSheet(); renderHome(); show('home'); return; }
+  quitArm = Date.now(); toast('もう{一回|いっかい} ×をおすと やめます（きろくはのこりません）');
+}
+
+/* --- 図のヒント --- */
+function visual(v) {
+  const frame = (fillA, fillB, cross = 0) => `<div class="frame">${Array.from({ length: 10 }, (_, i) => `<i class="${i < fillA ? 'a' : i < fillA + fillB ? 'b' : ''}${cross && i >= fillA - cross && i < fillA ? ' x' : ''}"></i>`).join('')}</div>`;
+  if (v.kind === 'frame') return `<div class="frames">${frame(v.a, 0)}</div><div class="vcap">●が ${v.a}こ。あいている○は？</div>`;
+  if (v.kind === 'dots') {
+    const a = v.a, b = v.b, f1b = Math.min(b, 10 - a), f2b = b - f1b;
+    return `<div class="frames">${frame(a, f1b)}${a + b > 10 ? frame(0, f2b) : ''}</div><div class="vcap">${a} と ${b}${a + b > 10 ? `　→ 10 と ${a + b - 10}` : ''}</div>`;
+  }
+  if (v.kind === 'sub') {
+    const a = v.a, b = v.b;
+    if (a <= 10) return `<div class="frames">${frame(a, 0, b)}</div><div class="vcap">${a} こから ${b} こ とる</div>`;
+    return `<div class="frames">${frame(10, 0, b)}${frame(a - 10, 0)}</div><div class="vcap">10 のまとまりから ${b} とる</div>`;
+  }
+  if (v.kind === 'array') return `<div class="arr" style="grid-template-columns:repeat(${v.c},14px)">${'<i></i>'.repeat(v.r * v.c)}</div><div class="vcap">${v.c} こずつ ${v.r} れつ</div>`;
+  return '';
+}
+
+/* --- 数字入力（大きいテンキー） --- */
+function ansNumber(q) {
+  const fields = q.fields || q.answer.map(() => ({}));
+  const vals = fields.map(() => ''); let act = 0;
+  const box = () => `<div class="boxes">${fields.map((f, i) => `${f.pre ? `<span>${fmt(f.pre)}</span>` : ''}<div class="box ${i === act ? 'active' : ''} ${vals[i] === '' ? 'empty' : ''}" data-i="${i}">${vals[i]}</div>${f.post ? `<span>${fmt(f.post)}</span>` : ''}`).join('')}</div>`;
+  const render = () => {
+    $('#ans').innerHTML = box() + `<div class="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-n="${n}">${n}</button>`).join('')}<button class="del" data-n="del">けす</button><button data-n="0">0</button><button class="go" data-n="go">こたえる</button></div>`;
+    $$('#ans .box').forEach(b => b.onclick = () => { act = +b.dataset.i; render(); });
+    $$('#ans .pad button').forEach(b => b.onclick = () => {
+      if (Q.locked) return;
+      const n = b.dataset.n;
+      if (n === 'del') vals[act] = vals[act].slice(0, -1);
+      else if (n === 'go') {
+        const empty = vals.findIndex(v => v === '');
+        if (empty >= 0) { act = empty; render(); return; }
+        return judge(vals.every((v, i) => +v === q.answer[i]), q.answer.join(' / '));
+      } else if (vals[act].length < 5) { vals[act] = (vals[act] === '0' ? '' : vals[act]) + n; }
+      render();
+    });
+  };
+  render();
+}
+/* --- えらぶ --- */
+function ansChoice(q) {
+  const opts = q.fixed ? q.options : shuffle(q.options);
+  const two = q.two || (opts.length % 2 === 0 && opts.every(o => bare(o).length <= 6) && !q.speakOptions);
+  $('#ans').innerHTML = `<div class="opts ${two ? 'two' : ''}">${opts.map((o, i) => q.speakOptions
+    ? `<div class="optrow"><button class="say" data-say="${esc(bare(o))}" aria-label="きく">${ICON.speaker}</button><button class="opt" data-i="${i}">${fmt(o)}</button></div>`
+    : `<button class="opt" data-i="${i}">${fmt(o)}</button>`).join('')}</div>`;
+  $$('#ans .say').forEach(b => b.onclick = () => say(b.dataset.say));
+  $$('#ans .opt').forEach(b => b.onclick = () => {
+    if (Q.locked) return;
+    const ok = opts[+b.dataset.i] === q.answer;
+    b.classList.add(ok ? 'right' : 'wrong');
+    if (!ok) $$('#ans .opt').forEach(x => { if (opts[+x.dataset.i] === q.answer) x.classList.add('right'); });
+    judge(ok, q.answer);
+  });
+}
+/* --- ならべかえ --- */
+function ansOrder(q) {
+  const words = q.words || String(q.answer).split(/\s+/);
+  const pool = shuffle(words.concat(q.extra || []).map((w, i) => ({ w, i })));
+  const line = [];
+  const render = () => {
+    $('#ans').innerHTML = `<div class="line">${line.map((p, k) => `<button class="word" data-k="${k}">${esc(p.w)}</button>`).join('')}</div>
+      <div class="pool">${pool.map(p => `<button class="word ${line.includes(p) ? 'used' : ''}" data-i="${p.i}">${esc(p.w)}</button>`).join('')}</div>
+      <button class="bigbtn" id="go" ${line.length ? '' : 'disabled'}>こたえる</button>`;
+    $$('#ans .line .word').forEach(b => b.onclick = () => { if (Q.locked) return; line.splice(+b.dataset.k, 1); render(); });
+    $$('#ans .pool .word').forEach(b => b.onclick = () => { if (Q.locked) return; const p = pool.find(x => x.i === +b.dataset.i); if (!line.includes(p)) { line.push(p); if (q.speakWords) say(p.w); } render(); });
+    $('#go').onclick = () => { if (Q.locked) return; judge(normEn(line.map(p => p.w).join(' ')) === normEn(words.join(' ')), words.join(' ')); };
+  };
+  render();
+}
+const normEn = s => String(s).toLowerCase().replace(/[’`]/g, "'").replace(/[.,!?。、]/g, ' ').replace(/\s+/g, ' ').trim();
+/* --- 書く（つづり） --- */
+function ansText(q) {
+  const answers = [].concat(q.answer);
+  $('#ans').innerHTML = `<input class="textin" id="tx" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ここに{書|か}く"><button class="bigbtn" id="go">こたえる</button>`;
+  $('#tx').placeholder = 'ここに書く';
+  const go = () => { if (Q.locked) return; const v = $('#tx').value; if (!v.trim()) return $('#tx').focus(); $('#tx').blur(); judge(answers.some(a => normEn(a) === normEn(v)), answers[0]); };
+  $('#go').onclick = go; $('#tx').onkeydown = e => { if (e.key === 'Enter') go(); };
+}
+/* --- 自分で丸つけ（ノートに書く問題など） --- */
+function ansSelf(q) {
+  $('#ans').innerHTML = `<button class="bigbtn ghost" id="reveal">こたえを{見|み}る</button>`;
+  $('#reveal').innerHTML = fmt('こたえを{見|み}る');
+  $('#reveal').onclick = () => {
+    $('#ans').innerHTML = `<div class="selfans">${fmt(Array.isArray(q.answer) ? q.answer.join(' / ') : q.answer)}</div>
+      ${q.explain ? `<ol class="steps">${[].concat(q.explain).map(s => `<li>${fmt(s)}</li>`).join('')}</ol>` : ''}
+      <div class="muted" style="text-align:center">あってた？</div>
+      <div class="selfbtns"><button class="bigbtn red" id="sok">○ できた</button><button class="bigbtn ghost" id="sng">× まちがえた</button></div>`;
+    $('#sok').onclick = () => judge(true, q.answer, true);
+    $('#sng').onclick = () => judge(false, q.answer, true);
+  };
+}
+
+/* --- 判定 --- */
+function judge(ok, correct, selfMode) {
+  if (Q.locked) return; Q.locked = true;
+  const q = Q.list[Q.cur], r = Q.res[Q.cur];
+  r.tries++;
+  if (ok) {
+    if (r.first === null) r.first = true;
+    r.done = true;
+    if (r.first) promoteMistake(q);
+    sndOk(); buzz(30);
+    $('#qcard').insertAdjacentHTML('beforeend', hanamaruSVG());
+    const more = q.reveal ? `<div class="correct">${fmt(q.reveal)}</div>` : '';
+    openSheet('good', `<h3>${pick(PRAISE)}</h3>${more}<button class="bigbtn" id="nx">つぎへ</button>`);
+    $('#nx').onclick = () => { if (Q && Q.locked) nextQ(); };
+    if (!q.reveal && !selfMode) Q.autoT = setTimeout(nextQ, 1100);
+  } else {
+    if (r.first === null) r.first = false;
+    addMistake(q);
+    sndNg(); buzz([20, 60, 20]);
+    $('#qcard').classList.remove('shake'); void $('#qcard').offsetWidth; $('#qcard').classList.add('shake');
+    if (r.tries < 3) Q.queue.push(Q.cur); else r.done = true;
+    const exp = q.explain ? `<ol class="steps">${[].concat(q.explain).map(s => `<li>${fmt(s)}</li>`).join('')}</ol>` : '';
+    openSheet('bad', `<h3>${pick(CHEER)}</h3>${selfMode ? '' : `<div class="correct">こたえ<b>${fmt(Array.isArray(correct) ? correct.join(' / ') : correct)}</b></div>`}${exp}
+      <div class="muted">${r.tries < 3 ? fmt('この{問題|もんだい}は あとで もう{一度|いちど} {出|で}るよ') : fmt('つぎのふくしゅうで また{出|で}るよ')}</div>
+      <button class="bigbtn" id="nx">わかった</button>`);
+    $('#nx').onclick = () => { if (Q && Q.locked) nextQ(); };
+    if (q.speak) setTimeout(() => say(q.speak), 400);
+  }
+}
+function openSheet(kind, html) { const s = $('#sheet'); s.className = 'sheet show ' + kind; $('#sheetin').innerHTML = html; }
+function hideSheet() { clearTimeout(Q && Q.autoT); $('#sheet').className = 'sheet'; }
+
+/* --- まちがい帳（間隔をあけて復習） --- */
+const GAPS = [1, 3, 7];
+function addMistake(q) {
+  const m = store.get('mistakes', {});
+  const cur = m[q.id];
+  m[q.id] = { q: Object.assign({}, q), box: 0, due: addDays(today(), 1), n: (cur ? cur.n : 0) + 1, at: today() };
+  store.set('mistakes', m);
+}
+function promoteMistake(q) {
+  const m = store.get('mistakes', {}); const e = m[q.id]; if (!e || e.at === today()) return;
+  e.box++; if (e.box >= GAPS.length) delete m[q.id]; else e.due = addDays(today(), GAPS[e.box]);
+  store.set('mistakes', m);
+}
+function dueMistakes() {
+  const m = store.get('mistakes', {}), t = today();
+  return Object.values(m).filter(e => e.due <= t).sort((a, b) => a.due < b.due ? -1 : 1);
+}
+
+/* ---------- データ ---------- */
+let CFG = { childName: '', reportUrl: '', reportKey: '' };
+let SETS = []; // {id,date,title,...set}
+
+async function getJSON(path) {
+  const r = await fetch(path + (path.includes('?') ? '&' : '?') + 't=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error(r.status); return r.json();
+}
+async function loadData() {
+  try {
+    const [cfg, idx] = await Promise.all([getJSON('data/config.json').catch(() => ({})), getJSON('data/index.json')]);
+    CFG = Object.assign(CFG, cfg);
+    const files = (idx.sets || []).slice(0, 60);
+    const sets = await Promise.all(files.map(f => getJSON('data/sets/' + f).catch(() => null)));
+    SETS = sets.filter(Boolean);
+  } catch (e) {
+    if (window.EMBED) { CFG = Object.assign(CFG, EMBED.config); SETS = EMBED.sets.slice(); }
+  }
+  SETS.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+const childName = () => settings.name || CFG.childName || '';
+
+/* ---------- きろく ---------- */
+const getLog = () => store.get('log', []);
+const getDone = () => store.get('done', {});
+function streak() {
+  const days = new Set(getLog().map(l => l.d)); let n = 0, d = today();
+  if (!days.has(d)) d = addDays(d, -1);
+  while (days.has(d)) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+/* ---------- ホーム ---------- */
+function renderHome(stampToday) {
+  const t = today(), days = new Set(getLog().map(l => l.d)), done = getDone();
+  const dow = (new Date().getDay() + 6) % 7, monday = addDays(t, -dow);
+  const week = Array.from({ length: 7 }, (_, i) => addDays(monday, i));
+  const cur = SETS.find(s => s.date <= t && !done[s.id]) || null;
+  const latest = SETS.find(s => s.date <= t);
+  const due = dueMistakes().length, allM = Object.keys(store.get('mistakes', {})).length;
+  const stars = store.get('stars', 0);
+  const setCard = cur ? todayCard(cur, false) : latest ? todayCard(latest, true) : `<div class="today"><div class="label">きょうのプリント</div><h2>まだ とどいていません</h2><p class="muted">{下|した}の れんしゅうを やってみよう</p></div>`;
+  $('#scr-home').innerHTML = `
+    <div class="top">
+      <div class="brand">${hanamaruSVG('').replace('<svg ', '<svg width="44" height="40" style="flex:none" ')}
+        <h1>はなまるノート<small>${childName() ? esc(childName()) + ' の ' : ''}まいにちドリル</small></h1></div>
+      <button class="iconbtn" id="gear" aria-label="せってい">${ICON.gear}</button>
+    </div>
+    <div class="stampcard">
+      <div class="stamphead"><b>${fmt('{今週|こんしゅう}のスタンプ')}</b>
+        <span class="streak">れんぞく <strong>${streak()}</strong> {日|にち}</span>
+        <span class="stars">${ICON.star.replace('<svg', '<svg width="16" height="16" style="vertical-align:-2px"')} <strong>${stars}</strong></span></div>
+      <div class="week">${week.map(d => `<div class="day ${d === t ? 'is-today' : ''}"><div class="slot">${days.has(d) ? stampSVG('できた', d === t && stampToday) : ''}</div>${WD[new Date(d + 'T00:00:00').getDay()]}</div>`).join('')}</div>
+    </div>
+    ${setCard}
+    <div class="tiles">
+      <button class="tile math" id="t-math"><b>${fmt('{計算|けいさん}れんしゅう')}</b><span>${fmt('10{問|もん}ずつ、なんどでも')}</span></button>
+      <button class="tile english" id="t-eng"><b>${fmt('{英語|えいご}の{音|おと}')}</b><span>${fmt('フォニックス・{発音|はつおん}{記号|きごう}')}</span></button>
+      <button class="tile review" id="t-rev"><b>ふくしゅう</b><span><span class="num">${due}</span> {問|もん}${!due && allM ? `（ほかに ${allM}）` : ''}</span></button>
+      <button class="tile plain" id="t-his"><b>${fmt('プリント{一覧|いちらん}')}</b><span>${fmt(`${Object.keys(done).length} まい できた`)}</span></button>
+    </div>`;
+  $$('#scr-home .stamphead b, #scr-home .streak, #scr-home .tile span').forEach(el => { if (/\{/.test(el.innerHTML)) el.innerHTML = fmt(el.textContent); });
+  const b = $('#scr-home .today .bigbtn'); if (b) b.onclick = () => startSet(b.dataset.id);
+  $('#gear').onclick = renderSettings;
+  $('#t-math').onclick = () => renderDrill('math');
+  $('#t-eng').onclick = () => renderDrill('english');
+  $('#t-rev').onclick = startReview;
+  $('#t-his').onclick = renderHistory;
+}
+function setMeta(s) {
+  const secs = (s.sections || []).map(sec => ({ subject: sec.subject, title: sec.title || (sec.generate ? skillName(sec.generate.skill) : ''), n: (sec.generate ? sec.generate.count || 10 : 0) + (sec.questions || []).length }));
+  const n = secs.reduce((a, b) => a + b.n, 0);
+  return { secs, n };
+}
+function todayCard(s, finished) {
+  const { secs, n } = setMeta(s), dn = getDone()[s.id];
+  return `<div class="today">
+    ${finished ? hanamaruSVG('done-mark') : ''}
+    <div class="label">${s.date === today() ? 'きょうのプリント' : jdate(s.date) + ' のプリント'}</div>
+    <h2>${fmt(s.title || 'プリント')}</h2>
+    <div class="chips">${secs.map(x => `<span class="chip ${x.subject}">${fmt(x.title)}・${x.n}{問|もん}</span>`).join('').replace(/\{問\|もん\}/g, '<ruby>問<rt>もん</rt></ruby>')}<span class="chip">${fmt(`やく ${Math.max(3, Math.round(n * 0.4))} {分|ふん}`)}</span></div>
+    ${s.message && !finished ? `<div class="msg">${fmt(s.message)}</div>` : ''}
+    ${finished ? `<p class="muted">${fmt(`きょうの{分|ぶん}は おわり！ ${dn ? `${dn.n}{問|もん}中 ${dn.ok}{問|もん} 1{回|かい}で{正解|せいかい}` : ''}`)}</p>
+      <button class="bigbtn ghost" data-id="${esc(s.id)}">${fmt('もう{一回|いっかい} やる')}</button>`
+      : `<button class="bigbtn red" data-id="${esc(s.id)}">はじめる</button>`}
+  </div>`;
+}
+function startSet(id) {
+  const s = SETS.find(x => x.id === id); if (!s) return;
+  startQuiz({ title: bare(s.title || 'プリント'), list: buildSet(s), setId: s.id, mode: 'set', subject: [...new Set((s.sections || []).map(x => x.subject))].join('+') });
+}
+function startReview() {
+  let list = dueMistakes();
+  if (!list.length) list = Object.values(store.get('mistakes', {}));
+  if (!list.length) { toast('まちがえた{問題|もんだい}は まだないよ。すごい！'); return; }
+  startQuiz({ title: 'ふくしゅう', list: list.slice(0, 10).map(e => e.q), mode: 'review', subject: 'review' });
+}
+
+/* ---------- れんしゅう（スキル選択） ---------- */
+function renderDrill(subject) {
+  const sk = SKILLS[subject];
+  $('#scr-drill').innerHTML = `<button class="back" id="bk">${ICON.back}もどる</button>
+    <div class="sectitle">${fmt(subject === 'math' ? '{計算|けいさん}れんしゅう' : '{英語|えいご}の{音|おと}')}</div>
+    <p class="muted">${fmt(subject === 'math' ? 'えらぶと 10{問|もん} {出|で}ます。かんたんなのを たくさん やるのが いちばんの{近道|ちかみち}。' : '{音|おと}が{出|で}ます。イヤホンか、{音|おと}を{出|だ}せる{場所|ばしょ}で。')}</p>
+    <div class="skillgrid">${sk.map(s => `<button class="skill ${subject}" data-id="${s.id}"><b>${fmt(s.name)}</b><span class="ex">${fmt(s.ex)}</span></button>`).join('')}</div>
+    <div id="danbox" hidden><div class="sectitle">${fmt('{九九|くく}：なんのだん？')}</div><div class="danrow">${[2, 3, 4, 5, 6, 7, 8, 9].map(d => `<button class="dan" data-d="${d}">${d}</button>`).join('')}<button class="dan" data-d="mix">まぜる</button></div></div>`;
+  $('#bk').onclick = () => { renderHome(); show('home'); };
+  $$('#scr-drill .skill').forEach(b => b.onclick = () => {
+    const s = sk.find(x => x.id === b.dataset.id);
+    if (s.dan) { $('#danbox').hidden = false; $('#danbox').scrollIntoView({ behavior: 'smooth' }); return; }
+    startQuiz({ title: bare(s.name), list: generate(s.id, subject === 'math' ? 10 : 8), mode: 'drill', subject });
+  });
+  $$('#scr-drill .dan').forEach(b => b.onclick = () => startQuiz({ title: `九九 ${b.dataset.d === 'mix' ? 'まぜる' : b.dataset.d + 'のだん'}`, list: generate('kuku', 10, { dan: b.dataset.d }), mode: 'drill', subject: 'math' }));
+  show('drill');
+}
+
+/* ---------- これまで ---------- */
+function renderHistory() {
+  const done = getDone(), log = getLog().slice(-30).reverse();
+  $('#scr-history').innerHTML = `<button class="back" id="bk">${ICON.back}もどる</button>
+    <div class="sectitle">プリント</div>
+    <div class="list">${SETS.map(s => { const d = done[s.id]; return `<button class="row" data-id="${esc(s.id)}"><div class="t"><b>${fmt(s.title || 'プリント')}</b><small>${jdate(s.date)}・${setMeta(s).n}問</small></div><span class="badge">${d ? `${d.ok}/${d.n}` : 'まだ'}</span></button>`; }).join('') || '<p class="muted">まだありません</p>'}</div>
+    <div class="sectitle">${fmt('さいきんの きろく')}</div>
+    <div class="list">${log.map(l => `<div class="row"><div class="t"><b>${fmt(l.t)}</b><small>${jdate(l.d)}・${Math.round(l.sec / 60)}分</small></div><span class="badge">${l.ok}/${l.n}</span></div>`).join('') || '<p class="muted">まだありません</p>'}</div>`;
+  $('#bk').onclick = () => { renderHome(); show('home'); };
+  $$('#scr-history button.row').forEach(b => b.onclick = () => startSet(b.dataset.id));
+  show('history');
+}
+
+/* ---------- せってい ---------- */
+let resetArm = 0;
+function renderSettings() {
+  const out = store.get('outbox', []);
+  $('#scr-settings').innerHTML = `<button class="back" id="bk">${ICON.back}もどる</button>
+    <div class="sectitle">せってい</div>
+    <div class="list">
+      <div class="set"><label for="s-furi">${fmt('ふりがなを{出|だ}す')}</label><input type="checkbox" id="s-furi" ${settings.furi ? 'checked' : ''}></div>
+      <div class="set"><label for="s-sound">${fmt('こうかおん')}</label><input type="checkbox" id="s-sound" ${settings.sound ? 'checked' : ''}></div>
+      <div class="set"><label for="s-rate">${fmt('{英語|えいご}の{読|よ}み{上|あ}げ')}</label><select id="s-rate"><option value="0.6">ゆっくり</option><option value="0.8">ふつう</option><option value="1">はやい</option></select></div>
+      <div class="set"><label for="s-name">なまえ</label><input id="s-name" value="${esc(settings.name)}" placeholder="${esc(CFG.childName || '')}" style="font:inherit;width:9em;padding:6px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)"></div>
+    </div>
+    <div class="sectitle">パパへの{報告|ほうこく}</div>
+    <p class="muted">${CFG.reportUrl ? `おわるたびに {自動|じどう}で おくっています。おくれていない きろく：${out.length}{件|けん}` : 'おくり{先|さき}が まだ せっていされていません（data/config.json）'}</p>
+    ${out.length && CFG.reportUrl ? '<button class="bigbtn ghost" id="flush">いま おくる</button>' : ''}
+    <div class="sectitle">データ</div>
+    <button class="bigbtn ghost danger" id="reset">きろくを ぜんぶ けす</button>`;
+  $$('#scr-settings .sectitle, #scr-settings p.muted').forEach(el => el.innerHTML = fmt(el.textContent));
+  $('#s-rate').value = String(settings.rate);
+  $('#s-furi').onchange = e => { settings.furi = e.target.checked; saveSettings(); document.body.classList.toggle('hide-furi', !settings.furi); };
+  $('#s-sound').onchange = e => { settings.sound = e.target.checked; saveSettings(); };
+  $('#s-rate').onchange = e => { settings.rate = +e.target.value; saveSettings(); say('Hello! Nice to meet you.'); };
+  $('#s-name').onchange = e => { settings.name = e.target.value.trim(); saveSettings(); };
+  if ($('#flush')) $('#flush').onclick = async () => { await flushOutbox(); renderSettings(); };
+  $('#reset').onclick = () => {
+    if (Date.now() - resetArm < 3000) { ['log', 'done', 'mistakes', 'stars', 'outbox'].forEach(k => store.set(k, k === 'stars' ? 0 : k === 'log' || k === 'outbox' ? [] : {})); toast('けしました'); renderHome(); show('home'); return; }
+    resetArm = Date.now(); toast('もう{一回|いっかい}おすと けします');
+  };
+  $('#bk').onclick = () => { renderHome(); show('home'); };
+  show('settings');
+}
+
+/* ---------- おわり ---------- */
+function finishQuiz() {
+  Q.finished = true; Q.locked = true;
+  const n = Q.list.length, ok = Q.res.filter(r => r.first).length, sec = Math.round((Date.now() - Q.start) / 1000);
+  const earned = ok + (Q.mode === 'set' ? 3 : 1);
+  const t = today(), firstToday = !getLog().some(l => l.d === t);
+  const log = getLog(); log.push({ d: t, t: Q.title, s: Q.subject, n, ok, sec, set: Q.setId, m: Q.mode }); store.set('log', log.slice(-400));
+  store.set('stars', store.get('stars', 0) + earned);
+  if (Q.setId) { const d = getDone(); d[Q.setId] = { ok, n, d: t }; store.set('done', d); }
+  const wrong = Q.list.filter((q, i) => Q.res[i].first === false).map(q => bare(q.prompt).replace(/\n/g, ' ') + ' → ' + bare([].concat(q.answer).join(' / ')));
+  const payload = { key: CFG.reportKey || '', name: childName(), date: t, time: new Date().toTimeString().slice(0, 5), mode: Q.mode, set: Q.setId || '', title: Q.title, subject: Q.subject, total: n, correct: ok, sec, stars: earned, wrong: wrong.join(' ｜ ') };
+  queueReport(payload);
+  const pct = ok / n, head = pct === 1 ? 'はなまる！' : pct >= .8 ? 'よくできました！' : pct >= .5 ? 'がんばったね！' : 'さいごまで やりきった！';
+  sndFin(); buzz([40, 60, 40]);
+  $('#scr-result').innerHTML = `<div class="result">
+    <div class="bigmaru">${hanamaruSVG('draw')}<div class="score">${ok}</div></div>
+    <h2>${head}</h2><p class="muted" style="margin:-6px 0 0">${fmt(`${n}{問|もん}中 ${ok}{問|もん}を 1{回|かい}で{正解|せいかい}`)}</p>
+    <div class="starpop">${Array.from({ length: Math.min(earned, 20) }, (_, i) => ICON.star.replace('<svg', `<svg style="animation-delay:${.6 + i * .06}s"`)).join('')}</div>
+    <div class="stats"><div class="stat"><b>${ok}</b><span>1{回|かい}で{正解|せいかい}</span></div><div class="stat"><b>${Math.floor(sec / 60)}:${pad2(sec % 60)}</b><span>かかった{時間|じかん}</span></div><div class="stat"><b>${streak()}</b><span>れんぞく{日|にち}</span></div></div>
+    ${wrong.length ? `<p class="muted">${fmt(`まちがえた ${wrong.length}{問|もん}は、あした「ふくしゅう」に{出|で}てくるよ`)}</p>` : ''}
+    <p class="report" id="rep">${CFG.reportUrl ? 'パパに おくっています…' : ''}</p>
+    <div class="btncol"><button class="bigbtn" id="home">${fmt(firstToday ? 'スタンプをおす' : 'ホームへ')}</button>
+      <button class="bigbtn ghost" id="share">LINEで パパに{見|み}せる</button></div>
+  </div>`;
+  $$('#scr-result .stat span, #share').forEach(el => el.innerHTML = fmt(el.textContent));
+  $('#home').onclick = () => { renderHome(firstToday); show('home'); Q = null; };
+  $('#share').onclick = () => shareText(`はなまるノート ${jdate(t)}\n「${Q ? Q.title : ''}」${ok}/${n}問 1回で正解（${Math.floor(sec / 60)}分${sec % 60}秒）\nれんぞく${streak()}日` + (wrong.length ? `\nまちがえた: ${wrong.slice(0, 5).join(' / ')}` : ''));
+  show('result');
+  if (pct >= .8) confetti();
+  flushOutbox().then(sent => { const r = $('#rep'); if (r && CFG.reportUrl) r.textContent = sent ? 'パパに おくりました' : 'あとで おくります（ネットにつながったら）'; });
+}
+async function shareText(text) {
+  try { if (navigator.share) { await navigator.share({ text }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  try { await navigator.clipboard.writeText(text); toast('コピーしました。LINEに はりつけてね'); } catch (e) { toast('コピーできませんでした'); }
+}
+
+/* ---------- パパへの報告（Googleスプレッドシート） ---------- */
+function queueReport(p) { if (!CFG.reportUrl) return; const o = store.get('outbox', []); o.push(p); store.set('outbox', o.slice(-200)); }
+async function flushOutbox() {
+  if (!CFG.reportUrl) return false;
+  let o = store.get('outbox', []); if (!o.length) return true;
+  try {
+    await fetch(CFG.reportUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ key: CFG.reportKey || '', rows: o }) });
+    store.set('outbox', []); return true;
+  } catch (e) { return false; }
+}
+
+/* ---------- 紙ふぶき ---------- */
+function confetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('#confetti'), x = c.getContext('2d'); c.hidden = false;
+  const W = c.width = innerWidth * devicePixelRatio, H = c.height = innerHeight * devicePixelRatio;
+  const cs = getComputedStyle(document.documentElement), cols = ['--red', '--gold', '--math', '--eng', '--dot-b'].map(v => cs.getPropertyValue(v).trim());
+  const P = Array.from({ length: 110 }, () => ({ x: W / 2 + (Math.random() - .5) * W * .3, y: H * .35, vx: (Math.random() - .5) * 22, vy: -Math.random() * 26 - 8, r: Math.random() * 6.28, vr: (Math.random() - .5) * .3, s: (6 + Math.random() * 8) * devicePixelRatio, c: pick(cols) }));
+  let f = 0;
+  (function step() {
+    x.clearRect(0, 0, W, H);
+    P.forEach(p => { p.vy += .6; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); x.restore(); });
+    if (++f < 150) requestAnimationFrame(step); else { x.clearRect(0, 0, W, H); c.hidden = true; }
+  })();
+}
+
+/* ---------- 起動 ---------- */
+(async function boot() {
+  document.body.classList.toggle('hide-furi', !settings.furi);
+  $('#scr-home').innerHTML = '<p class="muted" style="padding:40px 0;text-align:center">よみこみ中…</p>';
+  await loadData();
+  renderHome(); show('home');
+  flushOutbox();
+  if ('serviceWorker' in navigator && /github\.io$/.test(location.hostname)) { try { navigator.serviceWorker.register('sw.js'); } catch (e) {} }
+})();
+
+</script>
+</body>
+</html>
