@@ -396,6 +396,20 @@ u.ul{text-decoration:underline 3px var(--red);text-underline-offset:6px}
 .sheet.ref .in{max-height:75vh}
 .refbox{max-height:58vh;overflow:auto;padding:4px}
 
+/* ---- 理科・社会 ---- */
+:root{--sci:#0D7680;--sci-bg:#DCF2F3;--soc:#8A5A22;--soc-bg:#F5EAD9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sci:#8FDCE2;--sci-bg:#2F4C4F;--soc:#E8C08C;--soc-bg:#4D4030}}
+:root[data-theme="dark"]{--sci:#8FDCE2;--sci-bg:#2F4C4F;--soc:#E8C08C;--soc-bg:#4D4030}
+.tile.science,.grp.science,.qsub.science,.subicon.science{background:var(--sci-bg);color:var(--sci)}
+.grp.social,.qsub.social,.subicon.social{background:var(--soc-bg);color:var(--soc)}
+.skill.science .ex{color:var(--sci)}
+.skill.social .ex{color:var(--soc)}
+.tile{min-height:118px}
+.fig{width:100%;max-width:300px;color:var(--ink)}
+.fig svg{width:100%;height:auto;display:block;margin:0 auto}
+.fig svg[width]{width:110px}
+.word.ja{font-family:var(--f-body);font-size:18px}
+
 </style>
 <div class="app" id="app">
   <section id="scr-home"></section>
@@ -575,6 +589,8 @@ const ART = {
   books: `<svg viewBox="0 0 80 80" aria-hidden="true"><rect x="14" y="52" width="54" height="12" rx="3" fill="#90BBF3" stroke="${INK}" stroke-width="2.5"/><rect x="10" y="38" width="54" height="12" rx="3" fill="#7FD1A3" stroke="${INK}" stroke-width="2.5"/><rect x="16" y="14" width="42" height="22" rx="3" fill="#fff" stroke="${INK}" stroke-width="2.5"/><path d="M26 22 H40 M26 28 H36" stroke="#C9D1D9" stroke-width="2.5" stroke-linecap="round"/><circle cx="49" cy="25" r="6.5" fill="none" stroke="#E0463C" stroke-width="2.5"/><path d="M47 25 q2 -3 4 0 q-2 3 -3 1" fill="none" stroke="#E0463C" stroke-width="2"/></svg>`,
   rest: `<svg viewBox="0 0 120 90" aria-hidden="true"><path d="M30 60 h40 v8 a12 12 0 0 1 -12 12 h-16 a12 12 0 0 1 -12 -12z" fill="#FFD48A" stroke="${INK}" stroke-width="2.5"/><path d="M70 63 a7 7 0 0 1 0 12" fill="none" stroke="${INK}" stroke-width="2.5"/><path d="M42 50 q-4 -6 0 -12 M52 50 q-4 -6 0 -12 M62 50 q-4 -6 0 -12" fill="none" stroke="#A6B7AD" stroke-width="2.5" stroke-linecap="round"/><path d="M92 22 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#E3A008"/><path d="M16 30 l2 4.5 4.5 2 -4.5 2 -2 4.5 -2 -4.5 -4.5 -2 4.5 -2z" fill="#E0463C"/></svg>`,
   bubble: `<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M14 16 h44 a8 8 0 0 1 8 8 v24 a8 8 0 0 1 -8 8 h-24 l-12 11 v-11 h-8 a8 8 0 0 1 -8 -8 v-24 a8 8 0 0 1 8 -8z" fill="#E7D6F7" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="30" cy="34" r="2.4" fill="${INK}"/><circle cx="46" cy="34" r="2.4" fill="${INK}"/><path d="M31 41 q7 7 14 0" fill="#F59AB0" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/><circle cx="25" cy="40" r="3" fill="#F59AB0" opacity=".7"/><circle cx="51" cy="40" r="3" fill="#F59AB0" opacity=".7"/><text x="62" y="18" font-size="16" font-weight="900" fill="#7A4BA6" font-family="sans-serif">あ</text></svg>`,
+  flask: `<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M30 10 h20 M34 10 v20 l-16 30 a6 6 0 0 0 5 9 h34 a6 6 0 0 0 5 -9 l-16 -30 v-20" fill="#fff" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 52 h36 l6 11 a4 4 0 0 1 -4 5 h-40 a4 4 0 0 1 -4 -5z" fill="#6FD3D9"/><circle cx="34" cy="58" r="2" fill="${INK}"/><circle cx="46" cy="58" r="2" fill="${INK}"/><path d="M36 63 q4 3 8 0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/><circle cx="58" cy="24" r="4" fill="#6FD3D9" stroke="${INK}" stroke-width="1.5"/><circle cx="64" cy="12" r="2.5" fill="#6FD3D9" stroke="${INK}" stroke-width="1.5"/></svg>`,
+  globe: `<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 70 v6 M28 76 h24" stroke="${INK}" stroke-width="3" stroke-linecap="round"/><path d="M14 40 a26 26 0 0 0 52 0" fill="none" stroke="${INK}" stroke-width="2.5"/><circle cx="40" cy="38" r="22" fill="#9FD3F5" stroke="${INK}" stroke-width="2.5"/><path d="M28 26 q8 -4 12 2 q-2 6 -8 6 q-6 4 -2 10 q-8 -4 -6 -12z M46 40 q8 -2 10 6 q-4 8 -10 4z" fill="#8BC77A"/><circle cx="34" cy="40" r="1.8" fill="${INK}"/><circle cx="44" cy="40" r="1.8" fill="${INK}"/></svg>`,
   mic2: `<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 50 L32 74" stroke="${INK}" stroke-width="5" stroke-linecap="round"/><rect x="25" y="46" width="22" height="9" rx="3" transform="rotate(15 36 50)" fill="#C9D1D9" stroke="${INK}" stroke-width="2.5"/><circle cx="40" cy="28" r="18" fill="#F59AB0" stroke="${INK}" stroke-width="2.5"/><path d="M26 20 q14 -10 28 0 M24 29 q16 -8 32 0" stroke="#E07A9A" stroke-width="2" fill="none"/><circle cx="34" cy="31" r="2.2" fill="${INK}"/><circle cx="46" cy="31" r="2.2" fill="${INK}"/><path d="M36 36 q4 4 8 0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/><path d="M62 14 v14 a4 3 0 1 1 -3 -3 M62 14 l8 -3 v12 a4 3 0 1 1 -3 -3" fill="none" stroke="#7A4BA6" stroke-width="2.5" stroke-linecap="round"/><path d="M12 12 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#E3A008"/></svg>`,
   mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>',
 };
@@ -808,7 +824,7 @@ const MENU = {
   ],
 };
 const skillName = id => {
-  for (const g of MENU.math.concat(MENU.english, MENU.japanese || [])) { const it = g.items.find(s => s.id === id); if (it) return bare(it.name); }
+  for (const g of MENU.math.concat(MENU.english, MENU.japanese || [], MENU.rikasha || [])) { const it = g.items.find(s => s.id === id); if (it) return bare(it.name); }
   return id === 'ph_pattern' ? 'つづりと音' : id;
 };
 
@@ -1117,8 +1133,133 @@ MENU.japanese.push({ art: 'bubble', name: '{長文|ちょうぶん}を{読|よ}�
   { id: 'ja_reading', name: '1{文|ぶん}ずつ{読|よ}む', ex: '{物語|ものがたり}・{説明文|せつめいぶん}', n: 1 },
   { id: 'honban_ja', name: '{本番|ほんばん}チャレンジ', ex: '{時間|じかん}あり', honban: 'japanese' }] });
 
+/* ---------- 理科・社会（一問一答＋図） ----------
+   内申の9教科に入るので、基本の言葉を少しずつ。間違えたものは復習に回る。 */
+const FIG = {
+  /* こん虫：A頭 B胸 C腹 */
+  insect: `<svg viewBox="0 0 240 150" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+    <path d="M58 52 q-14 -26 -30 -30 M62 50 q-4 -28 -16 -40"/><circle cx="66" cy="66" r="16" fill="var(--card)"/>
+    <ellipse cx="108" cy="70" rx="24" ry="18" fill="var(--card)"/><ellipse cx="170" cy="74" rx="40" ry="22" fill="var(--card)"/>
+    <path d="M96 84 l-14 28 M108 88 l0 32 M120 84 l14 28 M96 56 l-12 -22 M108 52 l0 -26 M120 56 l14 -22"/>
+    <g stroke="none" fill="var(--red)" font-family="sans-serif" font-weight="900" font-size="18"><text x="58" y="112">A</text><text x="100" y="146">B</text><text x="164" y="118">C</text></g></svg>`,
+  /* 花のつくり：A花びら Bおしべ Cめしべ Dがく */
+  flower: `<svg viewBox="0 0 240 170" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+    <path d="M120 165 V120"/><path d="M92 120 q28 18 56 0" fill="var(--card)"/>
+    <path d="M86 118 q-40 -40 -10 -80 q24 20 30 70 M154 118 q40 -40 10 -80 q-24 20 -30 70" fill="var(--card)"/>
+    <path d="M120 118 V48"/><ellipse cx="120" cy="44" rx="7" ry="6" fill="currentColor"/><ellipse cx="120" cy="108" rx="10" ry="12" fill="var(--card)"/>
+    <path d="M104 116 q-6 -30 -2 -48 M136 116 q6 -30 2 -48"/><ellipse cx="102" cy="64" rx="6" ry="4" fill="var(--gold)"/><ellipse cx="138" cy="64" rx="6" ry="4" fill="var(--gold)"/>
+    <g stroke="none" fill="var(--red)" font-family="sans-serif" font-weight="900" font-size="18"><text x="44" y="60">A</text><text x="148" y="46">B</text><text x="112" y="26">C</text><text x="160" y="140">D</text></g>
+    <g stroke="var(--red)" stroke-width="1.5"><path d="M56 62 L74 76"/><path d="M152 48 L140 62"/><path d="M120 30 L120 38"/><path d="M158 134 L146 124"/></g></svg>`,
+};
+/* 地図記号（オリジナルの線画） */
+const MAPSYM = {
+  '{小|しょう}・{中学校|ちゅうがっこう}': '<text x="40" y="54" font-size="40" text-anchor="middle" fill="currentColor" stroke="none" font-family="serif" font-weight="700">文</text>',
+  '{郵便局|ゆうびんきょく}': '<circle cx="40" cy="40" r="26"/><path d="M26 30 H54 M26 40 H54 M40 40 V62"/>',
+  '{交番|こうばん}': '<path d="M24 24 L56 56 M56 24 L24 56"/>',
+  '{寺院|じいん}': '<text x="40" y="54" font-size="40" text-anchor="middle" fill="currentColor" stroke="none" font-family="serif" font-weight="700">卍</text>',
+  '{神社|じんじゃ}': '<path d="M18 22 H62 M24 32 H56 M30 22 V62 M50 22 V62"/>',
+  '{田|た}': '<path d="M32 22 V58 M48 22 V58"/>',
+  '{畑|はたけ}': '<path d="M24 26 L40 56 L56 26"/>',
+  '{果樹園|かじゅえん}': '<circle cx="40" cy="34" r="14"/><path d="M40 48 V62"/>',
+  '{工場|こうじょう}': '<circle cx="40" cy="40" r="14"/><path d="M40 16 V26 M40 54 V64 M16 40 H26 M54 40 H64 M23 23 L30 30 M50 50 L57 57 M57 23 L50 30 M30 50 L23 57"/>',
+  '{消防署|しょうぼうしょ}': '<path d="M40 64 V36 M40 36 L22 18 M40 36 L58 18"/>',
+};
+const mapSvg = k => `<svg viewBox="0 0 80 80" width="110" height="110" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="74" height="74" rx="10" stroke-width="2" stroke="var(--line)"/>${MAPSYM[k]}</svg>`;
+
+const SCI = [
+  /* 生き物 */
+  { g: 'life', q: 'こん{虫|ちゅう}の{足|あし}は{何本|なんぼん}？', a: '6{本|ぽん}', d: ['8{本|ほん}', '4{本|ほん}'], w: 'こん{虫|ちゅう}は6{本|ぽん}。8{本|ほん}のクモはこん{虫|ちゅう}ではない' },
+  { g: 'life', fig: 'insect', q: 'こん{虫|ちゅう}の{体|からだ}。{足|あし}がついているのはどこ？', a: 'B（{胸|むね}）', d: ['A（{頭|あたま}）', 'C（{腹|はら}）'], w: 'こん{虫|ちゅう}の{体|からだ}は {頭|あたま}・{胸|むね}・{腹|はら}。{足|あし}は{胸|むね}から{出|で}ている' },
+  { g: 'life', fig: 'flower', q: '{実|み}になる{部分|ぶぶん}「めしべ」はどれ？', a: 'C', d: ['A', 'B', 'D'], w: 'A{花|か}びら　Bおしべ　Cめしべ　Dがく' },
+  { g: 'life', fig: 'flower', q: '{花粉|かふん}をつくる「おしべ」はどれ？', a: 'B', d: ['A', 'C', 'D'], w: 'おしべの{先|さき}で{花粉|かふん}がつくられる' },
+  { g: 'life', q: '{植物|しょくぶつ}が{日光|にっこう}を{受|う}けて{養分|ようぶん}をつくるはたらきは？', a: '{光合成|こうごうせい}', d: ['{呼吸|こきゅう}', '{蒸散|じょうさん}'], w: '{光合成|こうごうせい}＝{光|ひかり}で{養分|ようぶん}（でんぷん）をつくる' },
+  { g: 'life', q: '{葉|は}から{水|みず}が{水蒸気|すいじょうき}になって{出|で}ていくことは？', a: '{蒸散|じょうさん}', d: ['{光合成|こうごうせい}', '{消化|しょうか}'], w: '{蒸散|じょうさん}は おもに{葉|は}の{裏|うら}で{起|お}こる' },
+  { g: 'life', q: '{子|こ}を{乳|ちち}で{育|そだ}てる{動物|どうぶつ}のなかまは？', a: 'ほ{乳類|にゅうるい}', d: ['{鳥類|ちょうるい}', 'は{虫類|ちゅうるい}'], w: 'ほ{乳類|にゅうるい}：ヒト・イヌ・クジラなど' },
+  { g: 'life', q: 'カエルのなかまは？', a: '{両生類|りょうせいるい}', d: ['は{虫類|ちゅうるい}', '{魚類|ぎょるい}'], w: '{子|こ}（おたまじゃくし）はえら、{親|おや}は{肺|はい}と{皮|ひ}ふで{呼吸|こきゅう}' },
+  { g: 'life', q: '{心臓|しんぞう}から{全身|ぜんしん}へ{血液|けつえき}を{送|おく}り{出|だ}す{血管|けっかん}は？', a: '{動脈|どうみゃく}', d: ['{静脈|じょうみゃく}', '{神経|しんけい}'], w: '{動脈|どうみゃく}＝{心臓|しんぞう}から{出|で}ていく、{静脈|じょうみゃく}＝{心臓|しんぞう}へもどる' },
+  { g: 'life', q: '{種子|しゅし}をつくらず、{胞子|ほうし}でふえる{植物|しょくぶつ}は？', a: 'シダ{植物|しょくぶつ}', d: ['アブラナ', 'イネ'], w: 'シダ{植物|しょくぶつ}・コケ{植物|しょくぶつ}は{胞子|ほうし}でふえる' },
+  /* 地球・天気 */
+  { g: 'earth', q: '{水|みず}が{氷|こおり}になる{温度|おんど}は？', a: '0℃', d: ['100℃', '50℃'], w: '0℃で{氷|こおり}、100℃でふっとう' },
+  { g: 'earth', q: '{水|みず}がふっとうする{温度|おんど}は？', a: '100℃', d: ['0℃', '60℃'], w: 'ふっとうすると さかんに{水蒸気|すいじょうき}になる' },
+  { g: 'earth', q: '{水|みず}が{水蒸気|すいじょうき}になって{空気|くうき}中に{出|で}ていくことは？', a: '{蒸発|じょうはつ}', d: ['{燃焼|ねんしょう}', 'ちんでん'], w: '{洗濯物|せんたくもの}がかわくのも{蒸発|じょうはつ}' },
+  { g: 'earth', q: '{太陽|たいよう}がのぼる{方角|ほうがく}は？', a: '{東|ひがし}', d: ['{西|にし}', '{北|きた}'], w: '{東|ひがし}からのぼり、{南|みなみ}の{空|そら}を{通|とお}って{西|にし}にしずむ' },
+  { g: 'earth', q: '{月|つき}が{光|ひか}って{見|み}えるのはなぜ？', a: '{太陽|たいよう}の{光|ひかり}をはね{返|かえ}しているから', d: ['{月|つき}が{自分|じぶん}で{光|ひか}っているから', '{地球|ちきゅう}が{照|て}らしているから'], w: '{月|つき}は{自分|じぶん}では{光|ひか}らない' },
+  { g: 'earth', q: '{雲|くも}の{量|りょう}が0〜1のときの{天気|てんき}は？', a: '{快晴|かいせい}', d: ['{晴|は}れ', 'くもり'], w: '0〜1{快晴|かいせい}、2〜8{晴|は}れ、9〜10くもり' },
+  { g: 'earth', q: '{地下|ちか}にある、{岩石|がんせき}がとけたものは？', a: 'マグマ', d: ['{化石|かせき}', '{地層|ちそう}'], w: 'マグマが{地上|ちじょう}に{出|で}たものが{溶岩|ようがん}' },
+  /* 物質・エネルギー */
+  { g: 'matter', q: '{磁石|じしゃく}につくのは？', a: '{鉄|てつ}のクリップ', d: ['アルミかん', '10{円玉|えんだま}'], w: '{磁石|じしゃく}につくのは{鉄|てつ}など。アルミや{銅|どう}はつかない' },
+  { g: 'matter', q: 'ものが{燃|も}えるのに{必要|ひつよう}な{気体|きたい}は？', a: '{酸素|さんそ}', d: ['{二酸化炭素|にさんかたんそ}', 'ちっ{素|そ}'], w: '{酸素|さんそ}がないと{火|ひ}は{消|き}える' },
+  { g: 'matter', q: '{石灰水|せっかいすい}を{白|しろ}くにごらせる{気体|きたい}は？', a: '{二酸化炭素|にさんかたんそ}', d: ['{酸素|さんそ}', '{水素|すいそ}'], w: '{二酸化炭素|にさんかたんそ}を{調|しら}べるときに{石灰水|せっかいすい}を{使|つか}う' },
+  { g: 'matter', q: '{空気|くうき}の{中|なか}で{一番|いちばん}{多|おお}い{気体|きたい}は？', a: 'ちっ{素|そ}', d: ['{酸素|さんそ}', '{二酸化炭素|にさんかたんそ}'], w: 'ちっ{素|そ}{約|やく}78%、{酸素|さんそ}{約|やく}21%' },
+  { g: 'matter', q: '{豆電球|まめでんきゅう}2{個|こ}を{電池|でんち}1{個|こ}につなぐ。1{個|こ}のときと{同|おな}じ{明|あか}るさになるのは？', a: '{並列|へいれつ}つなぎ', d: ['{直列|ちょくれつ}つなぎ', 'どちらも{暗|くら}くなる'], w: '{直列|ちょくれつ}だと{暗|くら}くなり、{並列|へいれつ}だと{同|おな}じ{明|あか}るさ' },
+  { g: 'matter', q: '{光|ひかり}が{鏡|かがみ}ではね{返|かえ}ることは？', a: '{反射|はんしゃ}', d: ['{屈折|くっせつ}', '{直進|ちょくしん}'], w: '{水|みず}やガラスで{曲|ま}がるのは{屈折|くっせつ}' },
+  { g: 'matter', q: '{音|おと}が{伝|つた}わらないのはどこ？', a: '{真空|しんくう}（{宇宙|うちゅう}など）', d: ['{水|みず}の{中|なか}', '{鉄|てつ}の{中|なか}'], w: '{音|おと}はものがふるえて{伝|つた}わる。{何|なに}もないと{伝|つた}わらない' },
+];
+
+const SOC = [
+  { g: 'japan', q: '{日本|にほん}で{一番|いちばん}{高|たか}い{山|やま}は？', a: '{富士山|ふじさん}', d: ['{北岳|きただけ}', '{浅間山|あさまやま}'], w: '{富士山|ふじさん}は3776m' },
+  { g: 'japan', q: '{日本|にほん}で{一番|いちばん}{長|なが}い{川|かわ}は？', a: '{信濃川|しなのがわ}', d: ['{利根川|とねがわ}', '{石狩川|いしかりがわ}'], w: '{信濃川|しなのがわ}は{長野県|ながのけん}・{新潟県|にいがたけん}を{流|なが}れる' },
+  { g: 'japan', q: '{日本|にほん}で{一番|いちばん}{大|おお}きい{湖|みずうみ}は？', a: '{琵琶湖|びわこ}', d: ['{霞ヶ浦|かすみがうら}', '{猪苗代湖|いなわしろこ}'], w: '{琵琶湖|びわこ}は{滋賀県|しがけん}' },
+  { g: 'japan', q: '{日本|にほん}の4つの{大|おお}きな{島|しま}で、{一番|いちばん}{大|おお}きいのは？', a: '{本州|ほんしゅう}', d: ['{北海道|ほっかいどう}', '{九州|きゅうしゅう}'], w: '{大|おお}きい{順|じゅん}：{本州|ほんしゅう}・{北海道|ほっかいどう}・{九州|きゅうしゅう}・{四国|しこく}' },
+  { g: 'world', q: '{世界|せかい}で{一番|いちばん}{大|おお}きい{大陸|たいりく}は？', a: 'ユーラシア{大陸|たいりく}', d: ['アフリカ{大陸|たいりく}', '{南|みなみ}アメリカ{大陸|たいりく}'], w: '{日本|にほん}のすぐ{西|にし}にある{大陸|たいりく}' },
+  { g: 'world', q: '{世界|せかい}で{一番|いちばん}{広|ひろ}い{海|うみ}は？', a: '{太平洋|たいへいよう}', d: ['{大西洋|たいせいよう}', 'インド{洋|よう}'], w: '3{大洋|たいよう}：{太平洋|たいへいよう}・{大西洋|たいせいよう}・インド{洋|よう}' },
+  { g: 'world', q: '{緯度|いど}0{度|ど}の{線|せん}は？', a: '{赤道|せきどう}', d: ['{本初子午線|ほんしょしごせん}', '{日付変更線|ひづけへんこうせん}'], w: '{赤道|せきどう}より{北|きた}が{北半球|きたはんきゅう}' },
+  { g: 'world', q: '{経度|けいど}0{度|ど}の{線|せん}は？', a: '{本初子午線|ほんしょしごせん}', d: ['{赤道|せきどう}', '{北回帰線|きたかいきせん}'], w: 'イギリスのロンドンを{通|とお}る' },
+  { g: 'hist', q: '{米|こめ}づくりが{広|ひろ}まった{時代|じだい}は？', a: '{弥生|やよい}{時代|じだい}', d: ['{縄文|じょうもん}{時代|じだい}', '{奈良|なら}{時代|じだい}'], w: '{縄文|じょうもん}は{狩|か}りや{木|き}の{実|み}、{弥生|やよい}から{米|こめ}づくり' },
+  { g: 'hist', q: '{邪馬台国|やまたいこく}の{女王|じょおう}は？', a: '{卑弥呼|ひみこ}', d: ['{紫式部|むらさきしきぶ}', '{清少納言|せいしょうなごん}'], w: '{弥生|やよい}{時代|じだい}の{人物|じんぶつ}' },
+  { g: 'hist', q: '{十七条|じゅうしちじょう}の{憲法|けんぽう}をつくったのは？', a: '{聖徳太子|しょうとくたいし}', d: ['{源頼朝|みなもとのよりとも}', '{徳川家康|とくがわいえやす}'], w: '{飛鳥|あすか}{時代|じだい}。{役人|やくにん}の{心得|こころえ}' },
+  { g: 'hist', q: '「{源氏物語|げんじものがたり}」を{書|か}いたのは？', a: '{紫式部|むらさきしきぶ}', d: ['{卑弥呼|ひみこ}', '{小野妹子|おののいもこ}'], w: '{平安|へいあん}{時代|じだい}。「{枕草子|まくらのそうし}」は{清少納言|せいしょうなごん}' },
+  { g: 'hist', q: '{鎌倉|かまくら}{幕府|ばくふ}を{開|ひら}いたのは？', a: '{源頼朝|みなもとのよりとも}', d: ['{織田信長|おだのぶなが}', '{徳川家康|とくがわいえやす}'], w: '1192{年|ねん}ごろ（1185{年|ねん}とする{説|せつ}も）' },
+  { g: 'hist', q: '{江戸|えど}{幕府|ばくふ}を{開|ひら}いたのは？', a: '{徳川家康|とくがわいえやす}', d: ['{豊臣秀吉|とよとみひでよし}', '{源頼朝|みなもとのよりとも}'], w: '1603{年|ねん}。{江戸|えど}{時代|じだい}は{約|やく}260{年|ねん}' },
+  { g: 'hist', q: '{東大寺|とうだいじ}の{大仏|だいぶつ}をつくらせた{天皇|てんのう}は？', a: '{聖武|しょうむ}{天皇|てんのう}', d: ['{推古|すいこ}{天皇|てんのう}', '{明治|めいじ}{天皇|てんのう}'], w: '{奈良|なら}{時代|じだい}' },
+];
+const KENCHO = [['{北海道|ほっかいどう}', '{札幌市|さっぽろし}'], ['{宮城県|みやぎけん}', '{仙台市|せんだいし}'], ['{茨城県|いばらきけん}', '{水戸市|みとし}'], ['{栃木県|とちぎけん}', '{宇都宮市|うつのみやし}'], ['{群馬県|ぐんまけん}', '{前橋市|まえばしし}'], ['{埼玉県|さいたまけん}', 'さいたま{市|し}'], ['{神奈川県|かながわけん}', '{横浜市|よこはまし}'], ['{石川県|いしかわけん}', '{金沢市|かなざわし}'], ['{愛知県|あいちけん}', '{名古屋市|なごやし}'], ['{兵庫県|ひょうごけん}', '{神戸市|こうべし}'], ['{島根県|しまねけん}', '{松江市|まつえし}'], ['{香川県|かがわけん}', '{高松市|たかまつし}'], ['{愛媛県|えひめけん}', '{松山市|まつやまし}'], ['{沖縄県|おきなわけん}', '{那覇市|なはし}']];
+const CHIHO = [['{大阪府|おおさかふ}', '{近畿|きんき}{地方|ちほう}'], ['{福岡県|ふくおかけん}', '{九州|きゅうしゅう}{地方|ちほう}'], ['{愛知県|あいちけん}', '{中部|ちゅうぶ}{地方|ちほう}'], ['{広島県|ひろしまけん}', '{中国|ちゅうごく}{地方|ちほう}'], ['{香川県|かがわけん}', '{四国|しこく}{地方|ちほう}'], ['{宮城県|みやぎけん}', '{東北|とうほく}{地方|ちほう}'], ['{東京都|とうきょうと}', '{関東|かんとう}{地方|ちほう}'], ['{新潟県|にいがたけん}', '{中部|ちゅうぶ}{地方|ちほう}'], ['{京都府|きょうとふ}', '{近畿|きんき}{地方|ちほう}']];
+const JIDAI = ['{縄文|じょうもん}', '{弥生|やよい}', '{古墳|こふん}', '{飛鳥|あすか}', '{奈良|なら}', '{平安|へいあん}', '{鎌倉|かまくら}', '{室町|むろまち}', '{安土桃山|あづちももやま}', '{江戸|えど}', '{明治|めいじ}'];
+
+const bankQ = (it, subject, prefix) => ({ type: 'choice', subject, key: `${prefix}:${bare(it.q).slice(0, 14)}`, prompt: it.q, svg: it.fig ? FIG[it.fig] : '', options: shuffle([it.a, ...it.d]), answer: it.a, explain: [it.w] });
+Object.assign(GEN, {
+  rika_life() { return bankQ(pick(SCI.filter(x => x.g === 'life')), 'science', 'rl'); },
+  rika_earth() { return bankQ(pick(SCI.filter(x => x.g === 'earth')), 'science', 're'); },
+  rika_matter() { return bankQ(pick(SCI.filter(x => x.g === 'matter')), 'science', 'rm'); },
+  rika_mix() { return bankQ(pick(SCI), 'science', 'rx'); },
+  sha_japan() {
+    const r = rnd(0, 2);
+    if (r === 0) { const it = pick(KENCHO), d = shuffle(KENCHO.filter(x => x !== it)).slice(0, 2).map(x => x[1]);
+      return { type: 'choice', subject: 'social', key: `kc:${bare(it[0])}`, prompt: `${it[0]}の{県庁所在地|けんちょうしょざいち}は？`, options: shuffle([it[1], ...d]), answer: it[1], explain: [`${it[0]} → ${it[1]}`, '{県名|けんめい}と{市|し}の{名前|なまえ}がちがう{所|ところ}は{特|とく}に{出|で}やすい'] }; }
+    if (r === 1) { const it = pick(CHIHO), all = [...new Set(CHIHO.map(x => x[1]))].filter(x => x !== it[1]);
+      return { type: 'choice', subject: 'social', key: `ch:${bare(it[0])}`, prompt: `${it[0]}は{何|なに}{地方|ちほう}？`, options: shuffle([it[1], ...shuffle(all).slice(0, 2)]), answer: it[1], explain: ['7{地方|ちほう}：{北海道|ほっかいどう}・{東北|とうほく}・{関東|かんとう}・{中部|ちゅうぶ}・{近畿|きんき}・{中国|ちゅうごく}{四国|しこく}・{九州|きゅうしゅう}'] }; }
+    return bankQ(pick(SOC.filter(x => x.g === 'japan')), 'social', 'sj');
+  },
+  sha_world() { return bankQ(pick(SOC.filter(x => x.g === 'world')), 'social', 'sw'); },
+  sha_hist() { return bankQ(pick(SOC.filter(x => x.g === 'hist')), 'social', 'sh'); },
+  sha_jidai() {
+    const st = rnd(0, JIDAI.length - 4), w = JIDAI.slice(st, st + 4);
+    return { type: 'order', subject: 'social', key: `jd:${st}`, jaWords: true, prompt: '{古|ふる}い{順|じゅん}に{並|なら}べよう（{時代|じだい}）', words: w, explain: [JIDAI.map(bare).join(' → ')] };
+  },
+  sha_mapsym() {
+    const keys = Object.keys(MAPSYM), k = pick(keys), d = shuffle(keys.filter(x => x !== k)).slice(0, 2);
+    return { type: 'choice', subject: 'social', key: `ms:${bare(k)}`, prompt: 'この{地図|ちず}{記号|きごう}は？', svg: mapSvg(k), options: shuffle([k, ...d]), answer: k, explain: [`${k}の{記号|きごう}`] };
+  },
+});
+const SUBJ_EXTRA = { science: '{理科|りか}', social: '{社会|しゃかい}' };
+MENU.rikasha = [
+  { art: 'flask', name: '{理科|りか}：{生|い}き{物|もの}', subj: 'science', items: [{ id: 'rika_life', name: '{生|い}き{物|もの}・{植物|しょくぶつ}', ex: 'こん{虫|ちゅう}・{花|はな}のつくり' }] },
+  { art: 'flask', name: '{理科|りか}：{地球|ちきゅう}と{物質|ぶっしつ}', subj: 'science', items: [
+    { id: 'rika_earth', name: '{天気|てんき}・{地球|ちきゅう}', ex: '{月|つき}・{雲|くも}・{水|みず}' },
+    { id: 'rika_matter', name: 'ものの{性質|せいしつ}', ex: '{磁石|じしゃく}・{気体|きたい}・{光|ひかり}' },
+    { id: 'rika_mix', name: 'まぜる', ex: '{理科|りか}{全部|ぜんぶ}から' }] },
+  { art: 'globe', name: '{社会|しゃかい}：{地理|ちり}', subj: 'social', items: [
+    { id: 'sha_japan', name: '{日本|にほん}の{地理|ちり}', ex: '{県庁所在地|けんちょうしょざいち}・{地方|ちほう}' },
+    { id: 'sha_world', name: '{世界|せかい}の{地理|ちり}', ex: '{大陸|たいりく}・{海|うみ}・{赤道|せきどう}' },
+    { id: 'sha_mapsym', name: '{地図|ちず}{記号|きごう}', ex: '文・卍・〒' }] },
+  { art: 'globe', name: '{社会|しゃかい}：{歴史|れきし}', subj: 'social', items: [
+    { id: 'sha_hist', name: '{人物|じんぶつ}とできごと', ex: '{卑弥呼|ひみこ}・{紫式部|むらさきしきぶ}' },
+    { id: 'sha_jidai', name: '{時代|じだい}の{順番|じゅんばん}', ex: '{縄文|じょうもん}→{弥生|やよい}→…' }] },
+];
+
 /* ---------- 出題エンジン ---------- */
-const SUBJ = { math: '{数学|すうがく}', english: '{英語|えいご}', japanese: '{国語|こくご}', review: '{復習|ふくしゅう}', other: 'その{他|ほか}' };
+const SUBJ = { math: '{数学|すうがく}', english: '{英語|えいご}', japanese: '{国語|こくご}', science: '{理科|りか}', social: '{社会|しゃかい}', review: '{復習|ふくしゅう}', other: 'その{他|ほか}' };
 const PRAISE = ['{正解|せいかい}！', 'いいね！', 'その{調子|ちょうし}！', 'すごい！', 'ばっちり！', '{完璧|かんぺき}！'];
 const CHEER = ['{惜|お}しい！', '{大丈夫|だいじょうぶ}！', '{一緒|いっしょ}に{確|たし}かめよう'];
 const PRACTICE = new Set(['learn', 'break', 'say', 'write', 'passage', 'breathe']);
@@ -1197,6 +1338,7 @@ function nextQ() {
       ${q.image ? `<img src="${esc(q.image)}" alt="" style="max-height:180px;border-radius:12px">` : ''}
       ${q.ref ? `<button class="refbtn" id="refbtn">${fmt('{本文|ほんぶん}を{見|み}る')}</button>` : ''}
       ${q.ctx ? `<div class="ctx">${hlNum(fmt(q.ctx))}</div>` : ''}
+      ${q.svg ? `<div class="fig">${q.svg}</div>` : ''}
       ${q.stage ? `<div class="stage"><div class="togaki">〈${fmt(q.stage.t)}〉</div><div class="serifu">「${fmt(q.stage.l)}」</div></div>` : ''}
       <div class="prompt ${q.big ? 'big' : ''}">${fmt(q.prompt)}</div>
       ${q.blank ? `<div class="blankword en">${esc(q.blank.word)}</div><div class="blankja">（${fmt(q.blank.ja)}）</div>` : ''}
@@ -1426,12 +1568,13 @@ function ansOrder(q) {
   const pool = shuffle(words.concat(q.extra || []).map((w, i) => ({ w, i })));
   const line = [];
   const render = () => {
-    $('#ans').innerHTML = `<div class="line">${line.map((p, k) => `<button class="word" data-k="${k}">${esc(p.w)}</button>`).join('')}</div>
-      <div class="pool">${pool.map(p => `<button class="word ${line.includes(p) ? 'used' : ''}" data-i="${p.i}">${esc(p.w)}</button>`).join('')}</div>
+    const lab = w => q.jaWords ? fmt(w) : esc(w), wc = q.jaWords ? 'word ja' : 'word';
+    $('#ans').innerHTML = `<div class="line">${line.map((p, k) => `<button class="${wc}" data-k="${k}">${lab(p.w)}</button>`).join('')}</div>
+      <div class="pool">${pool.map(p => `<button class="${wc} ${line.includes(p) ? 'used' : ''}" data-i="${p.i}">${lab(p.w)}</button>`).join('')}</div>
       <button class="bigbtn" id="go" ${line.length ? '' : 'disabled'}>${fmt('{答|こた}える')}</button>`;
     $$('#ans .line .word').forEach(b => b.onclick = () => { if (Q.locked) return; line.splice(+b.dataset.k, 1); render(); });
     $$('#ans .pool .word').forEach(b => b.onclick = () => { if (Q.locked) return; const p = pool.find(x => x.i === +b.dataset.i); if (!line.includes(p)) { line.push(p); if (q.speakWords) say(p.w); } render(); });
-    $('#go').onclick = () => { if (Q.locked) return; judge(normEn(line.map(p => p.w).join(' ')) === normEn(words.join(' ')), words.join(' ')); };
+    $('#go').onclick = () => { if (Q.locked) return; judge(line.map(p => p.w).join('|') === words.join('|') || normEn(line.map(p => p.w).join(' ')) === normEn(words.join(' ')), words.join(q.jaWords ? ' → ' : ' ')); };
   };
   render();
 }
@@ -1839,9 +1982,10 @@ function renderHome(stampToday) {
       <button class="tile math" id="t-math"><span class="art">${ART.pencil}</span><b>${fmt('{計算|けいさん}{練習|れんしゅう}')}</b></button>
       <button class="tile english" id="t-eng"><span class="art">${ART.notes}</span><b>${fmt('{英語|えいご}の{音|おと}')}</b></button>
       <button class="tile japanese" id="t-ja"><span class="art">${ART.bubble}</span><b>${fmt('{国語|こくご}の{言葉|ことば}')}</b></button>
+      <button class="tile science" id="t-sci"><span class="art">${ART.flask}</span><b>${fmt('{理科|りか}・{社会|しゃかい}')}</b></button>
       <button class="tile voice" id="t-voice"><span class="art">${ART.mic2}</span><b>${fmt('{発声|はっせい}{練習|れんしゅう}')}</b></button>
+      <button class="tile review" id="t-rev"><span class="art">${ART.review}</span><b>${fmt('{復習|ふくしゅう}')}</b>${due ? `<span class="badge-n">${due}</span>` : ''}</button>
     </div>
-    <button class="row slim" id="t-rev"><span class="art">${ART.review}</span><div class="t"><b>${fmt('{復習|ふくしゅう}')}</b></div>${due ? `<span class="badge-n inline">${due}</span>` : ''}${ICON.back.replace('<svg', '<svg style="transform:rotate(180deg)"')}</button>
     <button class="row slim" id="t-his"><span class="art">${ART.books}</span><div class="t"><b>${fmt('プリント{一覧|いちらん}')}</b></div>${ICON.back.replace('<svg', '<svg style="transform:rotate(180deg)"')}</button>`;
   const b = $('#scr-home .today .bigbtn'); if (b) b.onclick = () => startSet(b.dataset.id);
   $('#gear').onclick = renderSettings;
@@ -1849,6 +1993,7 @@ function renderHome(stampToday) {
   $('#t-eng').onclick = () => renderDrill('english');
   $('#t-ja').onclick = () => renderDrill('japanese');
   $('#t-voice').onclick = () => renderVoice();
+  $('#t-sci').onclick = () => renderDrill('rikasha');
   $('#t-rev').onclick = startReview;
   $('#t-his').onclick = renderHistory;
 }
@@ -1858,7 +2003,7 @@ function setMeta(s) {
 }
 function todayCard(s, finished) {
   const { n, subjects } = setMeta(s);
-  const icons = subjects.map(x => `<span class="subicon ${x}">${{ math: ART.pencil, english: ART.notes, japanese: ART.bubble }[x] || ''}${fmt(SUBJ[x] || '')}</span>`).join('');
+  const icons = subjects.map(x => `<span class="subicon ${x}">${{ math: ART.pencil, english: ART.notes, japanese: ART.bubble, science: ART.flask, social: ART.globe }[x] || ''}${fmt(SUBJ[x] || '')}</span>`).join('');
   return `<div class="today">
     ${finished ? hanamaruSVG('done-mark') : ''}
     <div class="label">${fmt(s.date === today() ? '{今日|きょう}のプリント' : jdate(s.date) + ' のプリント')}</div>
@@ -1886,18 +2031,18 @@ function renderDrill(subject, gi = null) {
   const groups = MENU[subject];
   if (gi === null) {
     $('#scr-drill').innerHTML = `${backBtn()}
-      <div class="sectitle">${fmt({ math: '{計算|けいさん}{練習|れんしゅう}', english: '{英語|えいご}の{音|おと}', japanese: '{国語|こくご}の{言葉|ことば}' }[subject])}</div>
-      <div class="list">${groups.map((g, i) => `<button class="grp ${subject}" data-g="${i}"><span class="art">${ART[g.art]}</span><b>${fmt(g.name)}</b></button>`).join('')}</div>`;
+      <div class="sectitle">${fmt({ math: '{計算|けいさん}{練習|れんしゅう}', english: '{英語|えいご}の{音|おと}', japanese: '{国語|こくご}の{言葉|ことば}', rikasha: '{理科|りか}・{社会|しゃかい}' }[subject])}</div>
+      <div class="list">${groups.map((g, i) => `<button class="grp ${g.subj || subject}" data-g="${i}"><span class="art">${ART[g.art]}</span><b>${fmt(g.name)}</b></button>`).join('')}</div>`;
     $('#bk').onclick = () => { renderHome(); show('home'); };
     $$('#scr-drill .grp').forEach(b => b.onclick = () => renderDrill(subject, +b.dataset.g));
     return show('drill');
   }
-  const g = groups[gi], count = subject === 'english' ? 8 : subject === 'japanese' ? 6 : 10;
+  const g = groups[gi], count = subject === 'english' ? 8 : subject === 'japanese' || subject === 'rikasha' ? 6 : 10;
   const pats = g.patterns ? Object.values(PH.patterns) : [];
   $('#scr-drill').innerHTML = `${backBtn()}
     <div class="sectitle">${fmt(g.name)}</div>
     <div class="skillgrid">${pats.map(pt => `<button class="skill english" data-pat="${pt.p}"><b class="en">${pt.p}</b><span class="ex">/${esc(pt.sym)}/</span></button>`).join('')}
-      ${g.items.map(s => `<button class="skill ${subject}" data-id="${s.id}"><b>${fmt(s.name)}</b><span class="ex">${fmt(s.ex)}</span></button>`).join('')}</div>
+      ${g.items.map(s => `<button class="skill ${g.subj || subject}" data-id="${s.id}"><b>${fmt(s.name)}</b><span class="ex">${fmt(s.ex)}</span></button>`).join('')}</div>
     <div id="danbox" hidden><div class="sectitle">${fmt('{何|なん}の{段|だん}？')}</div><div class="danrow">${[2, 3, 4, 5, 6, 7, 8, 9].map(d => `<button class="dan" data-d="${d}">${d}</button>`).join('')}<button class="dan" data-d="mix">まぜる</button></div></div>`;
   $('#bk').onclick = () => renderDrill(subject);
   $$('#scr-drill .skill[data-pat]').forEach(b => b.onclick = () => startQuiz({ title: `つづりと音 ${b.dataset.pat}`, list: generate('ph_pattern', 4, { pattern: b.dataset.pat }), mode: 'drill', subject }));
@@ -1905,7 +2050,7 @@ function renderDrill(subject, gi = null) {
     const s = g.items.find(x => x.id === b.dataset.id);
     if (s.dan) { $('#danbox').hidden = false; $('#danbox').scrollIntoView({ behavior: 'smooth' }); return; }
     if (s.honban) { const h = HONBAN[s.honban]; return startQuiz({ title: bare(h.title), list: generate(h.skill, h.count, { chunk: false }), mode: 'drill', subject, timeLimit: h.sec, breathe: true }); }
-    startQuiz({ title: bare(s.name), list: generate(s.skill || s.id, s.n || (s.id === 'ph_say' ? 5 : s.id === 'ja_sakubun' ? 1 : count), { chunk: s.chunk }), mode: 'drill', subject });
+    startQuiz({ title: bare(s.name), list: generate(s.skill || s.id, s.n || (s.id === 'ph_say' ? 5 : s.id === 'ja_sakubun' ? 1 : count), { chunk: s.chunk }), mode: 'drill', subject: g.subj || subject });
   });
   $$('#scr-drill .dan').forEach(b => b.onclick = () => startQuiz({ title: `九九 ${b.dataset.d === 'mix' ? 'まぜる' : b.dataset.d + 'の段'}`, list: generate('kuku', 10, { dan: b.dataset.d }), mode: 'drill', subject: 'math' }));
   show('drill');
