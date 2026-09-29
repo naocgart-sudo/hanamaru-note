@@ -1,0 +1,47 @@
+{
+  "id": "2026-09-30",
+  "date": "2026-09-30",
+  "title": "{引|ひ}き{算|ざん}と{体|からだ}の{言葉|ことば}",
+  "sections": [
+    {
+      "subject": "math",
+      "title": "{繰|く}り{下|さ}がり（{昨日|きのう}の）",
+      "generate": {
+        "skill": "sub_borrow",
+        "count": 5
+      }
+    },
+    {
+      "subject": "math",
+      "title": "まぜる",
+      "generate": {
+        "skill": "mix1",
+        "count": 5
+      }
+    },
+    {
+      "subject": "japanese",
+      "title": "{体|からだ}を{使|つか}った{慣用句|かんようく}",
+      "generate": {
+        "skill": "ja_kanyo",
+        "count": 3
+      }
+    },
+    {
+      "subject": "japanese",
+      "title": "セリフと{気持|きも}ち",
+      "generate": {
+        "skill": "ja_serifu",
+        "count": 2
+      }
+    },
+    {
+      "subject": "english",
+      "title": "{真|ま}ん{中|なか}の{母音|ぼいん}",
+      "generate": {
+        "skill": "ph_vowel",
+        "count": 4
+      }
+    }
+  ]
+}

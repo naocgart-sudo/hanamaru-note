@@ -310,6 +310,31 @@ ruby rt{font-size:.5em;color:var(--ink2);font-weight:400}
 body.taplock #scr-quiz .answer,body.taplock .inlinefb .bigbtn,body.taplock .sheet .bigbtn{opacity:.55;transition:opacity .15s}
 #scr-quiz .answer,.inlinefb .bigbtn,.sheet .bigbtn{transition:opacity .25s}
 
+/* ---- 国語 ---- */
+:root{--ja:#7A4BA6;--ja-bg:#F1E9F8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ja:#D2B6EE;--ja-bg:#46394F}}
+:root[data-theme="dark"]{--ja:#D2B6EE;--ja-bg:#46394F}
+.tile.japanese,.grp.japanese{background:var(--ja-bg);color:var(--ja)}
+.qsub.japanese,.subicon.japanese{background:var(--ja-bg);color:var(--ja)}
+.skill.japanese .ex{color:var(--ja)}
+.chip.japanese{background:var(--ja-bg);border-color:transparent;color:var(--ja)}
+u.ul{text-decoration:underline 3px var(--red);text-underline-offset:6px}
+.stage{width:100%;background:var(--paper);border-radius:14px;padding:12px 14px;text-align:left}
+.togaki{font-size:15px;color:var(--ink2)}
+.serifu{font-family:var(--f-disp);font-weight:900;font-size:24px;line-height:1.5;margin-top:4px}
+.kata{margin:0;padding-left:1.6em;text-align:left;font-size:16px;line-height:2}
+.kata b{display:inline-block;min-width:3.6em;color:var(--ja)}
+.wbox{width:100%;border-radius:14px;border:3px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:18px;line-height:1.7;padding:10px 12px;resize:vertical}
+.wcount{text-align:right;font-family:var(--f-disp);font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+.wcount.ok{color:var(--ok)}
+.row.slim{margin-bottom:14px;min-height:64px}
+.row.slim .art{width:44px;height:44px;flex:none}
+.row.slim .art svg{width:100%;height:100%}
+.row.slim > svg{color:var(--ink2)}
+.opt{display:block;line-height:1.55}
+.opt.long{font-size:18px;text-align:left;padding:12px 16px}
+.optrow .opt{display:flex;align-items:center;justify-content:center}
+
 </style>
 <div class="app" id="app">
   <section id="scr-home"></section>
@@ -363,15 +388,15 @@ function plain(t) {
 }
 function fmt(s) {
   s = String(s ?? ''); let out = '', last = 0, m;
-  const re = /\{([^|{}]+)\|([^{}]+)\}|\[\[(\d+)\/(\d+)\]\]/g;
+  const re = /\{([^|{}]+)\|([^{}]+)\}|\[\[(\d+)\/(\d+)\]\]|__([^_\n]+)__/g;
   while ((m = re.exec(s))) {
     out += plain(s.slice(last, m.index));
-    out += m[1] ? `<ruby>${esc(m[1])}<rt>${esc(m[2])}</rt></ruby>` : `<span class="frac"><span>${m[3]}</span><span>${m[4]}</span></span>`;
+    out += m[1] ? `<ruby>${esc(m[1])}<rt>${esc(m[2])}</rt></ruby>` : m[5] ? `<u class="ul">${fmt(m[5])}</u>` : `<span class="frac"><span>${m[3]}</span><span>${m[4]}</span></span>`;
     last = re.lastIndex;
   }
   return out + plain(s.slice(last));
 }
-const bare = s => String(s ?? '').replace(/\{([^|{}]+)\|[^{}]+\}/g, '$1').replace(/\[\[(\d+)\/(\d+)\]\]/g, '$1/$2');
+const bare = s => String(s ?? '').replace(/__([^_\n]+)__/g, '$1').replace(/\{([^|{}]+)\|[^{}]+\}/g, '$1').replace(/\[\[(\d+)\/(\d+)\]\]/g, '$1/$2');
 
 /* ---------- icons ---------- */
 const ICON = {
@@ -479,6 +504,7 @@ const ART = {
   review: `<svg viewBox="0 0 80 80" aria-hidden="true"><g transform="rotate(-6 40 40)"><rect x="12" y="12" width="54" height="56" rx="6" fill="#FFD48A" stroke="${INK}" stroke-width="2.5"/><path d="M12 22 H66" stroke="#E0A040" stroke-width="2"/><path d="M52 44 a13 13 0 1 1 -4 -9" fill="none" stroke="#B8620A" stroke-width="4" stroke-linecap="round"/><path d="M50 26 l0 10 -10 -1" fill="none" stroke="#B8620A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35" cy="42" r="1.8" fill="${INK}"/><circle cx="43" cy="42" r="1.8" fill="${INK}"/><path d="M35 48 q4 3 8 0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/></g></svg>`,
   books: `<svg viewBox="0 0 80 80" aria-hidden="true"><rect x="14" y="52" width="54" height="12" rx="3" fill="#90BBF3" stroke="${INK}" stroke-width="2.5"/><rect x="10" y="38" width="54" height="12" rx="3" fill="#7FD1A3" stroke="${INK}" stroke-width="2.5"/><rect x="16" y="14" width="42" height="22" rx="3" fill="#fff" stroke="${INK}" stroke-width="2.5"/><path d="M26 22 H40 M26 28 H36" stroke="#C9D1D9" stroke-width="2.5" stroke-linecap="round"/><circle cx="49" cy="25" r="6.5" fill="none" stroke="#E0463C" stroke-width="2.5"/><path d="M47 25 q2 -3 4 0 q-2 3 -3 1" fill="none" stroke="#E0463C" stroke-width="2"/></svg>`,
   rest: `<svg viewBox="0 0 120 90" aria-hidden="true"><path d="M30 60 h40 v8 a12 12 0 0 1 -12 12 h-16 a12 12 0 0 1 -12 -12z" fill="#FFD48A" stroke="${INK}" stroke-width="2.5"/><path d="M70 63 a7 7 0 0 1 0 12" fill="none" stroke="${INK}" stroke-width="2.5"/><path d="M42 50 q-4 -6 0 -12 M52 50 q-4 -6 0 -12 M62 50 q-4 -6 0 -12" fill="none" stroke="#A6B7AD" stroke-width="2.5" stroke-linecap="round"/><path d="M92 22 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#E3A008"/><path d="M16 30 l2 4.5 4.5 2 -4.5 2 -2 4.5 -2 -4.5 -4.5 -2 4.5 -2z" fill="#E0463C"/></svg>`,
+  bubble: `<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M14 16 h44 a8 8 0 0 1 8 8 v24 a8 8 0 0 1 -8 8 h-24 l-12 11 v-11 h-8 a8 8 0 0 1 -8 -8 v-24 a8 8 0 0 1 8 -8z" fill="#E7D6F7" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="30" cy="34" r="2.4" fill="${INK}"/><circle cx="46" cy="34" r="2.4" fill="${INK}"/><path d="M31 41 q7 7 14 0" fill="#F59AB0" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/><circle cx="25" cy="40" r="3" fill="#F59AB0" opacity=".7"/><circle cx="51" cy="40" r="3" fill="#F59AB0" opacity=".7"/><text x="62" y="18" font-size="16" font-weight="900" fill="#7A4BA6" font-family="sans-serif">あ</text></svg>`,
   mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>',
 };
 
@@ -711,7 +737,7 @@ const MENU = {
   ],
 };
 const skillName = id => {
-  for (const g of MENU.math.concat(MENU.english)) { const it = g.items.find(s => s.id === id); if (it) return bare(it.name); }
+  for (const g of MENU.math.concat(MENU.english, MENU.japanese || [])) { const it = g.items.find(s => s.id === id); if (it) return bare(it.name); }
   return id === 'ph_pattern' ? 'つづりと音' : id;
 };
 
@@ -728,11 +754,204 @@ function generate(skill, count = 10, params = {}) {
   return out;
 }
 
+/* ---------- 国語 ----------
+   漢字だけにしない：語彙・言い回し・気持ちの読み取り（演劇）・つなぎ言葉・作文
+   問題文はすべてオリジナル。対象の漢字以外にはふりがなを付ける。 */
+const JA = {
+  /* 言葉の意味（気持ち・様子の言葉。物語の読解と演技の両方に効く） */
+  goi: [
+    { w: 'うなだれる', m: 'がっかりして{首|くび}を{前|まえ}にたれる', ex: '{試合|しあい}に{負|ま}けて、うなだれる。' },
+    { w: 'しぶしぶ', m: 'いやいやながら', ex: 'しぶしぶ{部屋|へや}のそうじを{始|はじ}めた。' },
+    { w: 'うろたえる', m: 'あわてて、どうしてよいか{分|わ}からなくなる', ex: '{急|きゅう}に{名前|なまえ}を{呼|よ}ばれて、うろたえた。' },
+    { w: 'ためらう', m: '{迷|まよ}って、なかなか{決|き}められない', ex: '{話|はな}しかけるのを、ためらう。' },
+    { w: 'はにかむ', m: '{恥|は}ずかしそうにする', ex: 'ほめられて、はにかんだ。' },
+    { w: 'いぶかしげ', m: 'あやしいと{思|おも}っている{様子|ようす}', ex: '{母|はは}はいぶかしげに{私|わたし}を{見|み}た。' },
+    { w: 'けなげ', m: '{弱|よわ}い{者|もの}が{一生懸命|いっしょうけんめい}がんばる{様子|ようす}', ex: '{小|ちい}さな{弟|おとうと}のけなげな{姿|すがた}。' },
+    { w: 'ひたむき', m: '一つのことに{一生懸命|いっしょうけんめい}{打|う}ち{込|こ}む{様子|ようす}', ex: 'ひたむきに{練習|れんしゅう}する。' },
+    { w: 'ぶっきらぼう', m: '{話|はな}し{方|かた}や{態度|たいど}にやさしさがない', ex: 'ぶっきらぼうに「{別|べつ}に」と{答|こた}えた。' },
+    { w: 'おずおず', m: 'こわがって、ためらいながら', ex: 'おずおずと{手|て}を{挙|あ}げた。' },
+    { w: '{得意|とくい}げ', m: 'じまんしたい{様子|ようす}', ex: '{弟|おとうと}は{得意|とくい}げに{絵|え}を{見|み}せた。' },
+    { w: '{名残|なごり}{惜|お}しい', m: '{別|わか}れるのがつらい', ex: '{名残|なごり}{惜|お}しそうに{手|て}をふる。' },
+    { w: '{気|き}まずい', m: 'なんとなく、いごこちが{悪|わる}い', ex: 'けんかの{後|あと}で{気|き}まずい。' },
+    { w: '{照|て}れくさい', m: '{恥|は}ずかしくて{落|お}ち{着|つ}かない', ex: 'お{礼|れい}を{言|い}うのが{照|て}れくさい。' },
+    { w: '{心細|こころぼそ}い', m: 'たよるものがなくて{不安|ふあん}', ex: '一人で{留守番|るすばん}は{心細|こころぼそ}い。' },
+    { w: 'もどかしい', m: '{思|おも}うようにならなくて、いらいらする', ex: 'うまく{言|い}えなくて、もどかしい。' },
+    { w: '{素|そ}っ{気|け}ない', m: '{思|おも}いやりや、あいそがない', ex: '{素|そ}っ{気|け}ない{返事|へんじ}。' },
+    { w: '{晴|は}れ{晴|ば}れ', m: '{気持|きも}ちがすっきりしている', ex: '{晴|は}れ{晴|ば}れとした{顔|かお}。' },
+  ],
+  /* 体を使った慣用句（そのまま演技のしぐさになる） */
+  kanyo: [
+    { a: '{肩|かた}', rest: 'を{落|お}とす', m: 'がっかりする', act: '{肩|かた}をすとんと{下|さ}げて、ため{息|いき}' },
+    { a: '{胸|むね}', rest: 'がおどる', m: 'うれしくて、わくわくする', act: '{胸|むね}に{手|て}を{当|あ}てて、{明|あか}るい{声|こえ}で' },
+    { a: '{目|め}', rest: 'を{丸|まる}くする', m: 'おどろく', act: '{目|め}を{大|おお}きく{開|ひら}いて、{動|うご}きを{止|と}める' },
+    { a: '{耳|みみ}', rest: 'をすます', m: '{注意|ちゅうい}して{聞|き}く', act: '{体|からだ}を{止|と}めて、{音|おと}の{方|ほう}へ{少|すこ}し{顔|かお}を{向|む}ける' },
+    { a: '{口|くち}', rest: 'をとがらせる', m: '{不満|ふまん}そうにする', act: '{唇|くちびる}をつき{出|だ}して、そっぽを{向|む}く' },
+    { a: '{首|くび}', rest: 'をかしげる', m: '{不思議|ふしぎ}に{思|おも}う', act: '{頭|あたま}を{横|よこ}に{少|すこ}しかたむける' },
+    { a: '{手|て}', rest: 'に{汗|あせ}をにぎる', m: 'はらはらする', act: '{両手|りょうて}をぎゅっとにぎって、{見|み}つめる' },
+    { a: '{鼻|はな}', rest: 'が{高|たか}い', m: '{得意|とくい}になる', act: 'あごを{上|あ}げて、{胸|むね}をはる' },
+    { a: '{顔|かお}', rest: 'から{火|ひ}が{出|で}る', m: 'とても{恥|は}ずかしい', act: '{両手|りょうて}で{顔|かお}をおおう' },
+    { a: '{歯|は}', rest: 'を{食|く}いしばる', m: 'ぐっとがまんする', act: 'あごに{力|ちから}を{入|い}れて、こらえる' },
+    { a: '{足|あし}', rest: 'が{棒|ぼう}になる', m: '{歩|ある}きすぎて、とても{疲|つか}れる', act: 'ひざをのばしたまま、よろよろ{歩|ある}く' },
+    { a: '{息|いき}', rest: 'をのむ', m: 'おどろいて、{一瞬|いっしゅん}{息|いき}が{止|と}まる', act: 'はっと{息|いき}を{吸|す}って{止|と}める' },
+    { a: '{舌|した}', rest: 'を{巻|ま}く', m: 'とても{感心|かんしん}する', act: '「すごい…」と{小|ちい}さくつぶやく' },
+    { a: '{胸|むね}', rest: 'をなでおろす', m: 'ほっと{安心|あんしん}する', act: '{胸|むね}に{手|て}を{当|あ}てて、ふーっと{息|いき}をはく' },
+    { a: '{頭|あたま}', rest: 'をかかえる', m: 'とても{困|こま}る', act: '{両手|りょうて}で{頭|あたま}をおさえて、うつむく' },
+    { a: '{腕|うで}', rest: 'が{上|あ}がる', m: '{上手|じょうず}になる', act: '' },
+    { a: '{耳|みみ}', rest: 'が{痛|いた}い', m: '{自分|じぶん}の{弱|よわ}いところを{言|い}われて、つらい', act: '{目|め}をそらして、{苦笑|にがわら}い' },
+  ],
+  kotowaza: [
+    { k: '{猿|さる}も{木|き}から{落|お}ちる', m: '{名人|めいじん}でも{失敗|しっぱい}することがある' },
+    { k: '{急|いそ}がば{回|まわ}れ', m: '{急|いそ}ぐときこそ、{安全|あんぜん}な{方法|ほうほう}をえらぶ' },
+    { k: '{石|いし}の{上|うえ}にも{三年|さんねん}', m: 'がまんして{続|つづ}ければ、いつか{成功|せいこう}する' },
+    { k: '{七転|ななころ}び{八起|やお}き', m: '{何度|なんど}{失敗|しっぱい}しても、くじけずに{立|た}ち{上|あ}がる' },
+    { k: '{花|はな}より{団子|だんご}', m: '{見|み}た{目|め}より、{実際|じっさい}に{役立|やくだ}つものがいい' },
+    { k: '{塵|ちり}も{積|つ}もれば{山|やま}となる', m: '{小|ちい}さなことも{集|あつ}まれば{大|おお}きくなる' },
+    { k: '{雨|あめ}{降|ふ}って{地|じ}{固|かた}まる', m: 'もめごとの{後|あと}は、かえって{仲|なか}が{良|よ}くなる' },
+    { k: '{百聞|ひゃくぶん}は{一見|いっけん}にしかず', m: '{何度|なんど}も{聞|き}くより、一度{見|み}るほうがよく{分|わ}かる' },
+    { k: '{能|のう}ある{鷹|たか}は{爪|つめ}を{隠|かく}す', m: '{実力|じつりょく}のある{人|ひと}は、それを{見|み}せびらかさない' },
+    { k: '{転|ころ}ばぬ{先|さき}の{杖|つえ}', m: '{失敗|しっぱい}しないように、{前|まえ}もって{準備|じゅんび}する' },
+    { k: '{三人|さんにん}{寄|よ}れば{文殊|もんじゅ}の{知恵|ちえ}', m: 'みんなで{考|かんが}えれば、よい{考|かんが}えが{出|で}る' },
+    { k: '{笑|わら}う{門|かど}には{福|ふく}{来|き}たる', m: 'いつも{笑顔|えがお}の{家|いえ}には{幸|しあわ}せがやってくる' },
+    { k: '{好|す}きこそ{物|もの}の{上手|じょうず}なれ', m: '{好|す}きなことは、{自然|しぜん}と{上達|じょうたつ}する' },
+    { k: '{案|あん}ずるより{産|う}むが{易|やす}し', m: '{心配|しんぱい}するより、やってみると{案外|あんがい}かんたん' },
+  ],
+  /* 様子を表す言葉（擬音語・擬態語） */
+  yousu: [
+    { s: '{雨|あめ}が（　）{降|ふ}っている。', a: 'しとしと', d: ['からから', 'ぎらぎら'], m: 'しとしと＝{静|しず}かに{弱|よわ}く{降|ふ}る{雨|あめ}' },
+    { s: '{緊張|きんちょう}して{胸|むね}が（　）する。', a: 'どきどき', d: ['ぺこぺこ', 'つるつる'], m: 'どきどき＝{心臓|しんぞう}が{速|はや}く{打|う}つ{様子|ようす}' },
+    { s: 'おなかが（　）だ。', a: 'ぺこぺこ', d: ['どきどき', 'ぴかぴか'], m: 'ぺこぺこ＝とてもおなかがすいている' },
+    { s: '{赤|あか}ちゃんが（　）{眠|ねむ}っている。', a: 'すやすや', d: ['ぺらぺら', 'ごしごし'], m: 'すやすや＝{気持|きも}ちよさそうに{静|しず}かに{眠|ねむ}る' },
+    { s: '{英語|えいご}を（　）{話|はな}す。', a: 'ぺらぺら', d: ['すやすや', 'ぽかぽか'], m: 'ぺらぺら＝すらすらと{上手|じょうず}に{話|はな}す' },
+    { s: '{春|はる}の{日|ひ}ざしで（　）あたたかい。', a: 'ぽかぽか', d: ['ひやひや', 'ざらざら'], m: 'ぽかぽか＝ほどよくあたたかい' },
+    { s: '{出番|でばん}が{近|ちか}づいて（　）{落|お}ち{着|つ}かない。', a: 'そわそわ', d: ['うっとり', 'つるつる'], m: 'そわそわ＝{気|き}になって{落|お}ち{着|つ}かない' },
+    { s: '{部活|ぶかつ}の{後|あと}で（　）{疲|つか}れた。', a: 'ぐったり', d: ['にっこり', 'ぱりぱり'], m: 'ぐったり＝{力|ちから}がぬけるほど{疲|つか}れている' },
+    { s: 'ほめられて（　）{笑|わら}った。', a: 'にっこり', d: ['ぐったり', 'がたがた'], m: 'にっこり＝うれしそうにほほえむ' },
+    { s: '{寒|さむ}くて{体|からだ}が（　）ふるえる。', a: 'ぶるぶる', d: ['にこにこ', 'さらさら'], m: 'ぶるぶる＝{小|こ}きざみにふるえる' },
+    { s: '{小川|おがわ}の{水|みず}が（　）{流|なが}れる。', a: 'さらさら', d: ['ぎゅうぎゅう', 'ねばねば'], m: 'さらさら＝{軽|かる}やかに{流|なが}れる' },
+    { s: '{花|はな}びらが（　）{舞|ま}う。', a: 'ひらひら', d: ['ごつごつ', 'ずしずし'], m: 'ひらひら＝{薄|うす}いものが{軽|かる}くゆれる' },
+    { s: '{台本|だいほん}を{読|よ}んで、{思|おも}わず（　）{笑|わら}った。', a: 'くすっと', d: ['どしんと', 'ざあっと'], m: 'くすっと＝{小|ちい}さく{笑|わら}う' },
+  ],
+  /* セリフから気持ちを読む（〈 〉はト書き＝動きの説明） */
+  serifu: [
+    { t: '{目|め}をそらして、{小|ちい}さな{声|こえ}で', l: 'べつに……{気|き}にしてないし。', a: '{本当|ほんとう}は{気|き}にしている', d: ['{本当|ほんとう}に{何|なに}も{気|き}にしていない', '{相手|あいて}をほめている'], why: '{目|め}をそらす・{小|ちい}さな{声|こえ}＝{言葉|ことば}と{反対|はんたい}の{本音|ほんね}がかくれている' },
+    { t: '{両手|りょうて}をぎゅっとにぎって', l: 'よし、{行|い}くぞ！', a: '{気合|きあい}を{入|い}れている', d: ['こわくて{逃|に}げたい', '{眠|ねむ}くてだるい'], why: 'にぎりこぶし＝{力|ちから}を{入|い}れて{自分|じぶん}をはげましている' },
+    { t: 'ため{息|いき}をついて、{肩|かた}を{落|お}とし', l: 'また、だめだった……。', a: 'がっかりしている', d: ['{大喜|おおよろこ}びしている', 'おこってどなっている'], why: 'ため{息|いき}＋{肩|かた}を{落|お}とす＝がっかり' },
+    { t: '{目|め}をかがやかせて', l: 'えっ、{本当|ほんとう}に？ {私|わたし}が{主役|しゅやく}？', a: 'うれしくて、おどろいている', d: ['{主役|しゅやく}をいやがっている', '{相手|あいて}をうたがっておこっている'], why: '{目|め}をかがやかせる＝{期待|きたい}やよろこび' },
+    { t: '{腕|うで}を{組|く}んで、そっぽを{向|む}き', l: '{知|し}らない。{勝手|かって}にすれば。', a: 'すねて、おこっている', d: ['{楽|たの}しくてはしゃいでいる', '{相手|あいて}に{感謝|かんしゃ}している'], why: '{腕|うで}を{組|く}む・そっぽを{向|む}く＝{心|こころ}を{閉|と}じている' },
+    { t: '{何度|なんど}も{時計|とけい}を{見|み}ながら', l: 'まだかな……。', a: '{待|ま}ちきれなくて、{落|お}ち{着|つ}かない', d: ['{時計|とけい}がこわれて{困|こま}っている', 'ゆったりくつろいでいる'], why: '{何度|なんど}も{時計|とけい}を{見|み}る＝{待|ま}ちきれない' },
+    { t: 'くすっと{笑|わら}って', l: 'ほんと、しょうがないなあ。', a: 'あきれながらも、やさしく{許|ゆる}している', d: ['{本気|ほんき}でおこっている', 'とても{悲|かな}しんでいる'], why: '{笑|わら}いながらの「しょうがない」＝{許|ゆる}している' },
+    { t: '{声|こえ}をふるわせて', l: 'だいじょうぶ……だいじょうぶだから。', a: '{本当|ほんとう}は{不安|ふあん}で、{自分|じぶん}に{言|い}い{聞|き}かせている', d: ['{自信|じしん}たっぷりである', '{相手|あいて}をからかっている'], why: '{声|こえ}がふるえる＝{言葉|ことば}とちがって{心|こころ}はゆれている' },
+    { t: 'にやりと{笑|わら}って', l: 'ふふ、{作戦|さくせん}どおり。', a: '{思|おも}いどおりになって{満足|まんぞく}している', d: ['{作戦|さくせん}が{失敗|しっぱい}してくやしい', 'こわくておびえている'], why: 'にやり＝{自分|じぶん}だけが{分|わ}かっている{満足|まんぞく}の{笑|え}み' },
+    { t: '{頭|あたま}を{深|ふか}く{下|さ}げて', l: '{本当|ほんとう}に、{申|もう}し{訳|わけ}ありませんでした。', a: '{心|こころ}から{謝|あやま}っている', d: ['{相手|あいて}をばかにしている', '{早|はや}く{帰|かえ}りたがっている'], why: '{深|ふか}く{頭|あたま}を{下|さ}げる＝ていねいに、{心|こころ}から' },
+    { t: '{急|きゅう}に{立|た}ち{上|あ}がって', l: '{待|ま}って！ まだ{話|はなし}は{終|お}わってない！', a: '{引|ひ}き{止|と}めたくて、あせっている', d: ['{話|はなし}にあきている', '{安心|あんしん}して、くつろいでいる'], why: '{急|きゅう}に{立|た}つ＋「{待|ま}って！」＝あせり' },
+  ],
+  /* つなぎ言葉（接続語）：読解の土台 */
+  tsunagi: [
+    { s: '{雨|あめ}が{降|ふ}った。（　）、{遠足|えんそく}は{中止|ちゅうし}になった。', a: 'だから', d: ['しかし', 'たとえば'] },
+    { s: '{一生懸命|いっしょうけんめい}{練習|れんしゅう}した。（　）、{試合|しあい}には{負|ま}けてしまった。', a: 'しかし', d: ['だから', 'たとえば'] },
+    { s: '{好|す}きな{果物|くだもの}はたくさんある。（　）、りんごやみかんだ。', a: 'たとえば', d: ['しかし', 'だから'] },
+    { s: '{宿題|しゅくだい}をした。（　）、お{風呂|ふろ}に{入|はい}った。', a: 'それから', d: ['しかし', 'なぜなら'] },
+    { s: '{今朝|けさ}は{早|はや}く{起|お}きた。（　）、{朝|あさ}の{散歩|さんぽ}がしたかったからだ。', a: 'なぜなら', d: ['だから', 'たとえば'] },
+    { s: '{姉|あね}は{料理|りょうり}が{上手|じょうず}だ。（　）、そうじも{得意|とくい}だ。', a: 'そのうえ', d: ['しかし', 'なぜなら'] },
+    { s: '{春|はる}は{好|す}きだ。（　）、{花粉|かふん}は{苦手|にがて}だ。', a: 'でも', d: ['だから', 'それから'] },
+    { s: '{電車|でんしゃ}が{遅|おく}れた。（　）、{学校|がっこう}に{遅刻|ちこく}した。', a: 'そのため', d: ['しかし', 'たとえば'] },
+    { s: '{台本|だいほん}を{覚|おぼ}えた。（　）、{本番|ほんばん}ではセリフを{忘|わす}れてしまった。', a: 'ところが', d: ['だから', 'たとえば'] },
+  ],
+  /* 漢字（演劇・学校生活の言葉。対象の漢字にはふりがなを付けない） */
+  kanji: [
+    { k: '{友達|ともだち}と__約束__をした。', w: '約束', y: 'やくそく', dy: ['やくそう', 'よくそく'], dk: ['役束', '約速'] },
+    { k: '{劇|げき}の__主役__に{選|えら}ばれた。', w: '主役', y: 'しゅやく', dy: ['おもやく', 'しゅえき'], dk: ['主約', '首役'] },
+    { k: '__舞台__の{上|うえ}に{立|た}つ。', w: '舞台', y: 'ぶたい', dy: ['まいだい', 'ぶだい'], dk: ['部台', '舞代'] },
+    { k: '{大|おお}きな__拍手__が{起|お}こった。', w: '拍手', y: 'はくしゅ', dy: ['ひょうしゅ', 'はくて'], dk: ['泊手', '拍首'] },
+    { k: '__観客__が{笑|わら}った。', w: '観客', y: 'かんきゃく', dy: ['かんかく', 'みきゃく'], dk: ['歓客', '観各'] },
+    { k: '{気持|きも}ちを__表現__する。', w: '表現', y: 'ひょうげん', dy: ['ひょうけん', 'おもてげん'], dk: ['表見', '評現'] },
+    { k: '__台本__を{読|よ}む。', w: '台本', y: 'だいほん', dy: ['たいほん', 'だいもと'], dk: ['代本', '台木'] },
+    { k: '__緊張__して{手|て}がふるえる。', w: '緊張', y: 'きんちょう', dy: ['きんぴょう', 'けんちょう'], dk: ['緊帳', '近張'] },
+    { k: '{毎日|まいにち}__練習__を{続|つづ}ける。', w: '練習', y: 'れんしゅう', dy: ['れんしゅ', 'ねんしゅう'], dk: ['連習', '練集'] },
+    { k: '__順番__を{守|まも}る。', w: '順番', y: 'じゅんばん', dy: ['じゅんぱん', 'しゅんばん'], dk: ['準番', '順板'] },
+    { k: '{目標|もくひょう}を__達成__する。', w: '達成', y: 'たっせい', dy: ['たつせい', 'だっせい'], dk: ['達正', '建成'] },
+    { k: '{夢|ゆめ}を__実現__する。', w: '実現', y: 'じつげん', dy: ['みげん', 'じっけん'], dk: ['実見', '美現'] },
+    { k: '{明|あか}るい__性格__の{人|ひと}。', w: '性格', y: 'せいかく', dy: ['しょうかく', 'せいきゃく'], dk: ['正格', '性各'] },
+    { k: '{毎日|まいにち}の__努力__が{大切|たいせつ}だ。', w: '努力', y: 'どりょく', dy: ['どりき', 'ぬりょく'], dk: ['奴力', '努刀'] },
+    { k: 'いろいろな__経験__をする。', w: '経験', y: 'けいけん', dy: ['きょうけん', 'けいげん'], dk: ['軽験', '経検'] },
+  ],
+  /* 作文（推薦入試は150字程度×2題を15分。まずは型を覚える） */
+  sakubun: [
+    '{中学校|ちゅうがっこう}で{頑張|がんば}っていること',
+    '{高校|こうこう}でやってみたいこと',
+    '{最近|さいきん}うれしかったこと',
+    '{私|わたし}の{好|す}きなものを{紹介|しょうかい}する',
+    '{友達|ともだち}とはどんな{存在|そんざい}か',
+    '{失敗|しっぱい}から{学|まな}んだこと',
+    '{本|ほん}や{映画|えいが}で{心|こころ}に{残|のこ}った{場面|ばめん}',
+    '{将来|しょうらい}の{夢|ゆめ}',
+  ],
+};
+
+const J3 = (a, d) => shuffle([a, ...d]);
+Object.assign(GEN, {
+  ja_goi() {
+    const it = pick(JA.goi), d = shuffle(JA.goi.filter(x => x !== it)).slice(0, 2).map(x => x.m);
+    return { type: 'choice', subject: 'japanese', key: `jg:${bare(it.w)}`, prompt: `「${it.w}」の{意味|いみ}は？`, options: J3(it.m, d), answer: it.m, explain: [`${it.w}：${it.m}`, `{例|れい}）${it.ex}`] };
+  },
+  ja_kanyo() {
+    const it = pick(JA.kanyo), parts = [...new Set(JA.kanyo.map(x => x.a))].filter(x => x !== it.a);
+    return { type: 'choice', subject: 'japanese', key: `jk:${bare(it.a + it.rest)}`, prompt: `「（　）${it.rest}」\n＝${it.m}\n（　）に{入|はい}る{体|からだ}の{部分|ぶぶん}は？`, options: J3(it.a, shuffle(parts).slice(0, 2)), answer: it.a,
+      two: false, explain: [`${it.a}${it.rest}＝${it.m}`].concat(it.act ? [`{演|えん}じるなら：${it.act}`] : []) };
+  },
+  ja_kotowaza() {
+    const it = pick(JA.kotowaza), d = shuffle(JA.kotowaza.filter(x => x !== it)).slice(0, 2).map(x => x.k);
+    return { type: 'choice', subject: 'japanese', key: `jz:${bare(it.k)}`, prompt: `{意味|いみ}に{合|あ}うことわざは？\n「${it.m}」`, options: J3(it.k, d), answer: it.k, explain: [`${it.k}＝${it.m}`] };
+  },
+  ja_yousu() {
+    const it = pick(JA.yousu);
+    return { type: 'choice', subject: 'japanese', key: `jy:${it.a}`, prompt: `（　）に{合|あ}う{言葉|ことば}は？\n${it.s}`, options: J3(it.a, it.d), answer: it.a, explain: [it.s.replace('（　）', it.a), it.m] };
+  },
+  ja_serifu() {
+    const it = pick(JA.serifu);
+    return { type: 'choice', subject: 'japanese', key: `js:${bare(it.l)}`, stage: { t: it.t, l: it.l }, prompt: 'この{人|ひと}の{気持|きも}ちは？', options: J3(it.a, it.d), answer: it.a,
+      explain: [it.why, `{演|えん}じるなら：〈${it.t}〉の{動|うご}きを{先|さき}にしてから、セリフを{言|い}う`] };
+  },
+  ja_tsunagi() {
+    const it = pick(JA.tsunagi);
+    const role = { だから: '{前|まえ}のことが{理由|りゆう}になる', そのため: '{前|まえ}のことが{理由|りゆう}になる', しかし: '{前|まえ}と{反対|はんたい}のことが{続|つづ}く', でも: '{前|まえ}と{反対|はんたい}のことが{続|つづ}く', ところが: '{予想|よそう}と{反対|はんたい}のことが{起|お}こる', たとえば: '{例|れい}を{挙|あ}げる', それから: '{順番|じゅんばん}に{続|つづ}ける', なぜなら: '{理由|りゆう}を{後|あと}から{言|い}う', そのうえ: 'さらに{付|つ}け{加|くわ}える' };
+    return { type: 'choice', subject: 'japanese', key: `jt:${it.a}:${bare(it.s).slice(0, 6)}`, prompt: `（　）に{入|はい}るつなぎ{言葉|ことば}は？\n${it.s}`, options: J3(it.a, it.d), answer: it.a, explain: [it.s.replace('（　）', it.a), `${it.a}＝${role[it.a] || ''}`] };
+  },
+  ja_kanji_yomi() {
+    const it = pick(JA.kanji);
+    return { type: 'choice', subject: 'japanese', key: `jr:${it.w}`, prompt: `{赤|あか}い{線|せん}の{読|よ}み{方|かた}は？\n${it.k}`, options: J3(it.y, it.dy), answer: it.y, explain: [`${it.w}（${it.y}）`] };
+  },
+  ja_kanji_kaki() {
+    const it = pick(JA.kanji), sent = it.k.replace(`__${it.w}__`, `__${it.y}__`);
+    return { type: 'choice', subject: 'japanese', key: `jw:${it.w}`, prompt: `{赤|あか}い{線|せん}を{漢字|かんじ}で{書|か}くと？\n${sent}`, options: J3(it.w, it.dk), answer: it.w, explain: [`${it.y} → ${it.w}`, 'ノートに3{回|かい}{書|か}いてみよう'] };
+  },
+  ja_sakubun() {
+    const th = pick(JA.sakubun);
+    return { type: 'write', subject: 'japanese', practice: true, key: `jb:${bare(th)}`, theme: th, target: 150 };
+  },
+});
+
+MENU.japanese = [
+  { art: 'bubble', name: '{言葉|ことば}と{言|い}い{回|まわ}し', items: [
+    { id: 'ja_goi', name: '{気持|きも}ち・{様子|ようす}の{言葉|ことば}', ex: 'しぶしぶ・はにかむ' },
+    { id: 'ja_kanyo', name: '{体|からだ}を{使|つか}った{慣用句|かんようく}', ex: '{肩|かた}を{落|お}とす' },
+    { id: 'ja_yousu', name: 'ようすを{表|あらわ}す{言葉|ことば}', ex: 'そわそわ・ぽかぽか' },
+    { id: 'ja_kotowaza', name: 'ことわざ', ex: '{七転|ななころ}び{八起|やお}き' }] },
+  { art: 'bubble', name: '{気持|きも}ちを{読|よ}む（{演劇|えんげき}）', items: [
+    { id: 'ja_serifu', name: 'セリフと{気持|きも}ち', ex: '〈{目|め}をそらして〉「べつに」' }] },
+  { art: 'bubble', name: '{漢字|かんじ}', items: [
+    { id: 'ja_kanji_yomi', name: '{読|よ}み', ex: '{舞台|ぶたい}' },
+    { id: 'ja_kanji_kaki', name: '{書|か}き', ex: 'しゅやく → ?' }] },
+  { art: 'bubble', name: '{文|ぶん}と{作文|さくぶん}', items: [
+    { id: 'ja_tsunagi', name: 'つなぎ{言葉|ことば}', ex: 'だから・しかし' },
+    { id: 'ja_sakubun', name: '{作文|さくぶん}（150{字|じ}）', ex: '{型|かた}で{書|か}く' }] },
+];
+
 /* ---------- 出題エンジン ---------- */
-const SUBJ = { math: '{数学|すうがく}', english: '{英語|えいご}', review: '{復習|ふくしゅう}', other: 'その{他|ほか}' };
+const SUBJ = { math: '{数学|すうがく}', english: '{英語|えいご}', japanese: '{国語|こくご}', review: '{復習|ふくしゅう}', other: 'その{他|ほか}' };
 const PRAISE = ['{正解|せいかい}！', 'いいね！', 'その{調子|ちょうし}！', 'すごい！', 'ばっちり！', '{完璧|かんぺき}！'];
 const CHEER = ['{惜|お}しい！', '{大丈夫|だいじょうぶ}！', '{一緒|いっしょ}に{確|たし}かめよう'];
-const PRACTICE = new Set(['learn', 'break', 'say']);
+const PRACTICE = new Set(['learn', 'break', 'say', 'write']);
 let Q = null; // いまのクイズ
 
 /* 誤タップ防止：画面やボタンが切り替わってから 0.28秒 は押しても反応しない */
@@ -784,10 +1003,12 @@ function nextQ() {
   if (q.type === 'break') return renderBreak(q, head);
   if (q.type === 'learn') return renderLearn(q, head);
   if (q.type === 'say') return renderSay(q, head);
+  if (q.type === 'write') return renderWrite(q, head);
   $('#scr-quiz').innerHTML = `${head}
     <div class="qcard" id="qcard">
       <span class="qsub ${subj}">${fmt((SUBJ[subj] || SUBJ.other) + (r.tries ? '・もう{一度|いちど}' : ''))}</span>
       ${q.image ? `<img src="${esc(q.image)}" alt="" style="max-height:180px;border-radius:12px">` : ''}
+      ${q.stage ? `<div class="stage"><div class="togaki">〈${fmt(q.stage.t)}〉</div><div class="serifu">「${fmt(q.stage.l)}」</div></div>` : ''}
       <div class="prompt ${q.big ? 'big' : ''}">${fmt(q.prompt)}</div>
       ${q.blank ? `<div class="blankword en">${esc(q.blank.word)}</div><div class="blankja">（${fmt(q.blank.ja)}）</div>` : ''}
       ${q.speak ? speakBtns() : ''}
@@ -873,6 +1094,28 @@ function renderSay(q, head) {
   };
 }
 
+/* --- 作文（150字の型） --- */
+function renderWrite(q, head) {
+  const r = Q.res[Q.cur];
+  $('#scr-quiz').innerHTML = `${head}<div class="qcard write">
+    <span class="qsub japanese">${fmt('{作文|さくぶん}')}</span>
+    <div class="prompt">${fmt(q.theme)}</div>
+    <ol class="kata">
+      <li><b>${fmt('{結論|けつろん}')}</b>${fmt('「{私|わたし}は〜です。」')}</li>
+      <li><b>${fmt('{理由|りゆう}')}</b>${fmt('「なぜなら〜からです。」')}</li>
+      <li><b>${fmt('{例|れい}')}</b>${fmt('「たとえば〜。」')}</li>
+      <li><b>${fmt('まとめ')}</b>${fmt('「だから〜したいです。」')}</li>
+    </ol>
+    <p class="muted">${fmt(`${q.target}{字|じ}くらい（{原稿用紙|げんこうようし}7〜8{行|ぎょう}）。ノートに{書|か}いても、ここに{書|か}いてもOK`)}</p></div>
+    <div class="answer"><textarea id="wr" class="wbox" rows="6" placeholder="ここに書く（書かなくてもOK）"></textarea>
+      <div class="wcount" id="wc">0 / ${q.target}</div>
+      <button class="bigbtn" id="go">${fmt('{書|か}けた！')}</button></div>`;
+  $('#qclose').onclick = confirmQuit;
+  const upd = () => { const n = $('#wr').value.replace(/\s/g, '').length; $('#wc').textContent = `${n} / ${q.target}`; $('#wc').classList.toggle('ok', n >= q.target * 0.8); };
+  $('#wr').oninput = upd;
+  $('#go').onclick = () => { r.done = true; r.first = true; r.text = $('#wr').value.trim(); sndOk(); nextQ(); };
+}
+
 /* --- 図のヒント --- */
 function visual(v) {
   const frame = (fillA, fillB, cross = 0) => `<div class="frame">${Array.from({ length: 10 }, (_, i) => `<i class="${i < fillA ? 'a' : i < fillA + fillB ? 'b' : ''}${cross && i >= fillA - cross && i < fillA ? ' x' : ''}"></i>`).join('')}</div>`;
@@ -918,7 +1161,7 @@ function ansChoice(q) {
   const two = q.two || (opts.length % 2 === 0 && opts.every(o => bare(o).length <= 6) && !q.speakOptions);
   $('#ans').innerHTML = `<div class="opts ${two ? 'two' : ''}">${opts.map((o, i) => q.speakOptions
     ? `<div class="optrow"><button class="say" data-say="${esc(bare(o))}" aria-label="聞く">${ICON.speaker}</button><button class="opt" data-i="${i}">${fmt(o)}</button></div>`
-    : `<button class="opt" data-i="${i}">${fmt(o)}</button>`).join('')}</div>`;
+    : `<button class="opt${bare(o).length > 9 ? ' long' : ''}" data-i="${i}">${fmt(o)}</button>`).join('')}</div>`;
   $$('#ans .say').forEach(b => b.onclick = () => say(b.dataset.say));
   $$('#ans .opt').forEach(b => b.onclick = () => {
     if (Q.locked) return;
@@ -1102,13 +1345,15 @@ function renderHome(stampToday) {
     <div class="tiles">
       <button class="tile math" id="t-math"><span class="art">${ART.pencil}</span><b>${fmt('{計算|けいさん}{練習|れんしゅう}')}</b></button>
       <button class="tile english" id="t-eng"><span class="art">${ART.notes}</span><b>${fmt('{英語|えいご}の{音|おと}')}</b></button>
+      <button class="tile japanese" id="t-ja"><span class="art">${ART.bubble}</span><b>${fmt('{国語|こくご}の{言葉|ことば}')}</b></button>
       <button class="tile review" id="t-rev"><span class="art">${ART.review}</span><b>${fmt('{復習|ふくしゅう}')}</b>${due ? `<span class="badge-n">${due}</span>` : ''}</button>
-      <button class="tile plain" id="t-his"><span class="art">${ART.books}</span><b>${fmt('プリント{一覧|いちらん}')}</b></button>
-    </div>`;
+    </div>
+    <button class="row slim" id="t-his"><span class="art">${ART.books}</span><div class="t"><b>${fmt('プリント{一覧|いちらん}')}</b></div>${ICON.back.replace('<svg', '<svg style="transform:rotate(180deg)"')}</button>`;
   const b = $('#scr-home .today .bigbtn'); if (b) b.onclick = () => startSet(b.dataset.id);
   $('#gear').onclick = renderSettings;
   $('#t-math').onclick = () => renderDrill('math');
   $('#t-eng').onclick = () => renderDrill('english');
+  $('#t-ja').onclick = () => renderDrill('japanese');
   $('#t-rev').onclick = startReview;
   $('#t-his').onclick = renderHistory;
 }
@@ -1118,7 +1363,7 @@ function setMeta(s) {
 }
 function todayCard(s, finished) {
   const { n, subjects } = setMeta(s);
-  const icons = subjects.map(x => `<span class="subicon ${x}">${x === 'math' ? ART.pencil : ART.notes}${fmt(SUBJ[x] || '')}</span>`).join('');
+  const icons = subjects.map(x => `<span class="subicon ${x}">${{ math: ART.pencil, english: ART.notes, japanese: ART.bubble }[x] || ''}${fmt(SUBJ[x] || '')}</span>`).join('');
   return `<div class="today">
     ${finished ? hanamaruSVG('done-mark') : ''}
     <div class="label">${fmt(s.date === today() ? '{今日|きょう}のプリント' : jdate(s.date) + ' のプリント')}</div>
@@ -1146,13 +1391,13 @@ function renderDrill(subject, gi = null) {
   const groups = MENU[subject];
   if (gi === null) {
     $('#scr-drill').innerHTML = `${backBtn()}
-      <div class="sectitle">${fmt(subject === 'math' ? '{計算|けいさん}{練習|れんしゅう}' : '{英語|えいご}の{音|おと}')}</div>
+      <div class="sectitle">${fmt({ math: '{計算|けいさん}{練習|れんしゅう}', english: '{英語|えいご}の{音|おと}', japanese: '{国語|こくご}の{言葉|ことば}' }[subject])}</div>
       <div class="list">${groups.map((g, i) => `<button class="grp ${subject}" data-g="${i}"><span class="art">${ART[g.art]}</span><b>${fmt(g.name)}</b></button>`).join('')}</div>`;
     $('#bk').onclick = () => { renderHome(); show('home'); };
     $$('#scr-drill .grp').forEach(b => b.onclick = () => renderDrill(subject, +b.dataset.g));
     return show('drill');
   }
-  const g = groups[gi], count = subject === 'math' ? 10 : 8;
+  const g = groups[gi], count = subject === 'english' ? 8 : subject === 'japanese' ? 6 : 10;
   const pats = g.patterns ? Object.values(PH.patterns) : [];
   $('#scr-drill').innerHTML = `${backBtn()}
     <div class="sectitle">${fmt(g.name)}</div>
@@ -1164,7 +1409,7 @@ function renderDrill(subject, gi = null) {
   $$('#scr-drill .skill[data-id]').forEach(b => b.onclick = () => {
     const s = g.items.find(x => x.id === b.dataset.id);
     if (s.dan) { $('#danbox').hidden = false; $('#danbox').scrollIntoView({ behavior: 'smooth' }); return; }
-    startQuiz({ title: bare(s.name), list: generate(s.id, s.id === 'ph_say' ? 5 : count), mode: 'drill', subject });
+    startQuiz({ title: bare(s.name), list: generate(s.id, s.id === 'ph_say' ? 5 : s.id === 'ja_sakubun' ? 1 : count), mode: 'drill', subject });
   });
   $$('#scr-drill .dan').forEach(b => b.onclick = () => startQuiz({ title: `九九 ${b.dataset.d === 'mix' ? 'まぜる' : b.dataset.d + 'の段'}`, list: generate('kuku', 10, { dan: b.dataset.d }), mode: 'drill', subject: 'math' }));
   show('drill');
@@ -1238,7 +1483,8 @@ function fillVoices() {
 function finishQuiz() {
   Q.finished = true; Q.locked = true;
   const idx = Q.list.map((q, i) => i).filter(i => !Q.list[i].practice);
-  const scored = idx.length ? idx : Q.list.map((q, i) => i).filter(i => Q.list[i].type === 'say');
+  const scored = idx.length ? idx : Q.list.map((q, i) => i).filter(i => ['say', 'write'].includes(Q.list[i].type));
+  const writing = Q.list.map((q, i) => q.type === 'write' && Q.res[i].text ? `【${bare(q.theme)}】${Q.res[i].text}` : '').filter(Boolean).join('\n');
   const n = scored.length, ok = scored.filter(i => Q.res[i].first).length, sec = Math.round((Date.now() - Q.start) / 1000);
   const earned = ok + (Q.mode === 'set' ? 3 : 1);
   const t = today(), firstToday = !getLog().some(l => l.d === t);
@@ -1246,7 +1492,7 @@ function finishQuiz() {
   store.set('stars', store.get('stars', 0) + earned);
   if (Q.setId) { const d = getDone(); d[Q.setId] = { ok, n, d: t }; store.set('done', d); }
   const wrong = scored.filter(i => Q.res[i].first === false).map(i => { const q = Q.list[i]; return q.type === 'say' ? `（発音）${q.word}` : bare(q.blank ? q.blank.word : q.prompt).replace(/\n/g, ' ') + ' → ' + bare([].concat(q.answer).join(' / ')); });
-  queueReport({ key: CFG.reportKey || '', name: childName(), date: t, time: new Date().toTimeString().slice(0, 5), mode: Q.mode, set: Q.setId || '', title: Q.title, subject: Q.subject, total: n, correct: ok, sec, stars: earned, wrong: wrong.join(' ｜ ') });
+  queueReport({ key: CFG.reportKey || '', name: childName(), date: t, time: new Date().toTimeString().slice(0, 5), mode: Q.mode, set: Q.setId || '', title: Q.title, subject: Q.subject, total: n, correct: ok, sec, stars: earned, wrong: wrong.join(' ｜ '), writing });
   const pct = n ? ok / n : 1, head = pct === 1 ? 'はなまる！' : pct >= .8 ? 'よくできました！' : pct >= .5 ? '{頑張|がんば}ったね！' : '{最後|さいご}までやりきった！';
   sndFin(); buzz([40, 60, 40]);
   $('#scr-result').innerHTML = `<div class="result">
